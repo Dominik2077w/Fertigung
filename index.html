@@ -1,0 +1,1209 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Garber1</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7f6;
+      --panel: #ffffff;
+      --ink: #1f2523;
+      --muted: #68746f;
+      --line: #dce3df;
+      --green: #26735c;
+      --green-strong: #145f49;
+      --amber: #b76b12;
+      --red: #b2473a;
+      --blue: #2f6f9f;
+      --shadow: 0 24px 70px rgba(31, 37, 35, .10);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans SC", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 36%),
+        var(--bg);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: var(--radius);
+      min-height: 40px;
+      padding: 0 14px;
+      cursor: pointer;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease, color .16s ease;
+    }
+
+    button:hover {
+      border-color: #aebbb5;
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button.primary {
+      color: #fff;
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    button.primary:hover {
+      background: var(--green-strong);
+      border-color: var(--green-strong);
+    }
+
+    button.icon {
+      width: 42px;
+      padding: 0;
+      display: inline-grid;
+      place-items: center;
+      font-size: 19px;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(245, 247, 246, .92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius);
+      background: #e8f0ec;
+      border: 1px solid #cedbd5;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .mark svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .segmented {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #fff;
+      height: 40px;
+    }
+
+    .segmented button {
+      border: 0;
+      border-radius: 0;
+      min-height: 38px;
+      padding: 0 12px;
+      color: var(--muted);
+      background: transparent;
+    }
+
+    .segmented button.active {
+      background: #e5eee9;
+      color: var(--green-strong);
+    }
+
+    .layout {
+      width: min(1180px, calc(100% - 32px));
+      margin: 26px auto 36px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .study {
+      display: grid;
+      gap: 16px;
+    }
+
+    .progress-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .progress {
+      height: 10px;
+      border-radius: 999px;
+      background: #e0e7e3;
+      overflow: hidden;
+      border: 1px solid #d4ddd8;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--green), #2f6f9f);
+      transition: width .22s ease;
+    }
+
+    .counter {
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .card-inner {
+      position: relative;
+    }
+
+    .face {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .face.back {
+      display: none;
+    }
+
+    .card-inner:not(.flipped) .back,
+    .card-inner.flipped .front {
+      display: none;
+      pointer-events: none;
+    }
+
+    .card-inner.flipped .back {
+      display: flex;
+      pointer-events: auto;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfb;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #edf4f0;
+      color: var(--green-strong);
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .card-body {
+      flex: 1;
+      display: grid;
+      grid-template-rows: auto;
+      gap: 18px;
+      padding: 28px;
+    }
+
+    .question {
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      min-height: clamp(150px, 28vh, 260px);
+    }
+
+    .question h2 {
+      margin: 0;
+      font-size: clamp(24px, 4.2vw, 42px);
+      line-height: 1.16;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .question .zh {
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .answer-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .section {
+      border-left: 4px solid #cbd9d2;
+      padding: 1px 0 1px 14px;
+    }
+
+    .section.answer-de {
+      border-color: var(--green);
+    }
+
+    .section.answer-zh {
+      border-color: var(--blue);
+    }
+
+    .section.extra {
+      border-color: var(--amber);
+    }
+
+    .label {
+      margin: 0 0 7px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .section p {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.62;
+      overflow-wrap: anywhere;
+    }
+
+    .source {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      margin-top: 2px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .answer-actions {
+      display: flex;
+      justify-content: center;
+    }
+
+    .answer-actions button {
+      min-width: 160px;
+    }
+
+    .self-check {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .self-check button {
+      min-width: 0;
+      min-height: 48px;
+      padding-inline: 10px;
+      font-weight: 750;
+    }
+
+    .choice-unknown {
+      color: #fff;
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    .choice-unsure {
+      color: #fff;
+      background: #202523;
+      border-color: #202523;
+    }
+
+    .choice-known {
+      color: #fff;
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .mode-switch {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .mode-switch button.active {
+      color: #fff;
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .side {
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 12px 40px rgba(31, 37, 35, .06);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    .search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      min-height: 40px;
+      padding: 0 12px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(38, 115, 92, .14);
+    }
+
+    .list {
+      max-height: 506px;
+      overflow: auto;
+      padding: 8px;
+    }
+
+    .list-item {
+      width: 100%;
+      display: grid;
+      gap: 6px;
+      text-align: left;
+      border: 1px solid transparent;
+      background: transparent;
+      border-radius: var(--radius);
+      padding: 10px;
+      min-height: auto;
+    }
+
+    .list-item:hover,
+    .list-item.active {
+      transform: none;
+      background: #f2f6f4;
+      border-color: #d4ddd8;
+    }
+
+    .list-title {
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.32;
+      font-weight: 650;
+      overflow-wrap: anywhere;
+    }
+
+    .list-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 14px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: #fbfcfb;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 23px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 940px) {
+      .topbar-inner {
+        min-height: auto;
+        padding: 14px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .toolbar {
+        justify-content: flex-start;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .list {
+        max-height: 280px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .topbar-inner,
+      .layout {
+        width: min(100% - 20px, 1180px);
+      }
+
+      .toolbar,
+      .segmented {
+        width: 100%;
+      }
+
+      .segmented button {
+        flex: 1;
+        padding-inline: 8px;
+      }
+
+      .progress-row,
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .card-body {
+        padding: 20px;
+      }
+
+      .question {
+        min-height: 150px;
+      }
+
+      .question h2 {
+        font-size: 28px;
+      }
+
+      .question .zh {
+        font-size: 18px;
+      }
+
+      .self-check,
+      .mode-switch {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-height: 560px) {
+      .topbar,
+      .progress-row {
+        display: none;
+      }
+
+      .layout {
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+
+      .card-head {
+        padding: 10px 20px;
+      }
+
+      .card-body {
+        gap: 12px;
+        padding: 14px 24px;
+      }
+
+      .question {
+        gap: 12px;
+        min-height: 120px;
+      }
+
+      .question h2 {
+        font-size: clamp(24px, 3.7vw, 38px);
+        line-height: 1.12;
+      }
+
+      .question .zh {
+        font-size: 18px;
+      }
+
+      .answer-grid {
+        gap: 10px;
+      }
+
+      .section p {
+        font-size: 15px;
+        line-height: 1.45;
+      }
+
+      .source {
+        font-size: 12px;
+        padding-top: 8px;
+      }
+
+      .face.front .controls {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" role="img">
+              <path d="M10 45h44" stroke="#145f49" stroke-width="3" stroke-linecap="round"/>
+              <path d="M17 43l20-23 9 23H17z" fill="#d9e8e1" stroke="#145f49" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M37 20c8 4 13 9 15 16" stroke="#2f6f9f" stroke-width="3" stroke-linecap="round"/>
+              <path d="M24 43l13-23" stroke="#b76b12" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <h1>Garber1</h1>
+            <p class="subtitle"><span id="deckCount">0</span> 张 Fertigungstechnik 复习卡</p>
+          </div>
+        </div>
+        <div class="toolbar">
+          <div class="segmented" aria-label="语言">
+            <button data-lang="de">DE</button>
+            <button data-lang="zh">中文</button>
+            <button data-lang="both" class="active">双语</button>
+          </div>
+          <button id="shuffleBtn" class="icon" type="button" title="洗牌" aria-label="洗牌">↻</button>
+          <button id="resetBtn" class="icon" type="button" title="重置进度" aria-label="重置进度">×</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="study" aria-live="polite">
+        <div class="progress-row">
+          <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+          <div class="counter" id="counter">1 / 1</div>
+        </div>
+
+        <div class="flashcard">
+          <div class="card-inner" id="cardInner">
+            <article class="face front">
+              <div class="card-head">
+                <span class="pill" id="frontTag">Frage</span>
+                <span class="status" id="frontStatus">未复习</span>
+              </div>
+              <div class="card-body">
+                <div class="question">
+                  <h2 id="questionDe"></h2>
+                  <div class="zh" id="questionZh"></div>
+                </div>
+                <div class="self-check">
+                  <button class="choice-unknown" data-choice="unknown" type="button">不知道</button>
+                  <button class="choice-unsure" data-choice="unsure" type="button">不熟练</button>
+                  <button class="choice-known" data-choice="known" type="button">知道</button>
+                </div>
+                <div class="controls">
+                  <button id="prevBtn" class="icon" type="button" title="上一张" aria-label="上一张">←</button>
+                  <button id="nextBtn" class="icon" type="button" title="下一张" aria-label="下一张">→</button>
+                </div>
+              </div>
+            </article>
+
+            <article class="face back">
+              <div class="card-head">
+                <span class="pill" id="backTag">Antwort</span>
+                <span class="status" id="backStatus">未复习</span>
+              </div>
+              <div class="card-body">
+                <div class="answer-grid" id="answerGrid"></div>
+                <div class="answer-actions">
+                  <button id="answerNextBtn" class="primary" type="button">下一题</button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>卡片</h2>
+            <span class="counter" id="visibleCount">0</span>
+          </div>
+          <div class="mode-switch">
+            <button data-mode="all" class="active" type="button">全部卡片</button>
+            <button data-mode="wrong" type="button">错题库</button>
+          </div>
+          <div style="padding: 14px; border-bottom: 1px solid var(--line);">
+            <input id="searchInput" class="search" type="search" placeholder="搜索题目、答案、出处">
+          </div>
+          <div class="list" id="cardList"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>进度</h2>
+          </div>
+          <div class="stats">
+            <div class="stat"><strong id="statSeen">0</strong><span>已看过</span></div>
+            <div class="stat"><strong id="statGood">0</strong><span>知道</span></div>
+            <div class="stat"><strong id="statAgain">0</strong><span>错题库</span></div>
+            <div class="stat"><strong id="statLeft">0</strong><span>未完成</span></div>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script id="sourceData" type="text/plain">
+["Nennen Sie die 6 Hauptgruppen der Fertigungsverfahren nach DIN 8580.","Frage (DE)：Nennen Sie die 6 Hauptgruppen der Fertigungsverfahren nach DIN 8580.\nAntwort (DE)：Urformen; Umformen; Trennen; Fügen; Beschichten; Stoffeigenschaften ändern.\nPrüfungshinweis (txt)：Dozent betont die Übersicht über die Hauptgruppen als Basis; feste Nicht-Prüfungs-Verfahren: Stoßen/Hobeln/Läppen/Räumen.\n中文题目：请写出 DIN 8580 的六大制造主组。\n中文答案：原型成形 Urformen；成形 Umformen；分离/去除 Trennen；连接 Fügen；涂覆 Beschichten；材料性能改变 Stoffeigenschaften ändern。\n出处：FT 1 -  Einführung - Skript.pdf S.4; Prüfungsinhalt.pdf S.1 (Nicht in Prüfung); full.md (Abschnitt: Einteilung DIN 8580, Seitenzahl im md nicht relevant); Garber_2025_10_02.txt (Prüfungshinweise)"]
+["Erklären Sie kurz den Unterschied zwischen Urformen, Umformen und Trennen.","Frage (DE)：Erklären Sie kurz den Unterschied zwischen Urformen, Umformen und Trennen.\nAntwort (DE)：Urformen: formloser Stoff → Werkstück, Stoffzusammenhalt wird geschaffen; Umformen: Formänderung durch plastische Verformung, Masse & Stoffzusammenhalt bleiben (Dichte kann sich ändern); Trennen: Formänderung fester Körper, Zusammenhalt im Bearbeitungsbereich aufgehoben, Teilchen/Späne werden abgetrennt → Masse ↓.\n中文题目：简述 Urformen、Umformen、Trennen 的区别。\n中文答案：Urformen：从无定形材料制造工件并建立材料结合；Umformen：在保持材料结合与质量基本不变前提下塑性变形（密度可能变化）；Trennen：在加工区破坏结合并去除颗粒/切屑，使质量减少。\n出处：FT 1 -  Einführung - Skript.pdf S.5–7; full.md (Abschnitte: Urformen/Umformen/Trennen); Garber_2025_10_02.txt (Einführung)"]
+["Nennen Sie die Untergruppen des Umformens nach Art der Spannungseinwirkung und je ein Beispiel.","Frage (DE)：Nennen Sie die Untergruppen des Umformens nach Art der Spannungseinwirkung und je ein Beispiel.\nAntwort (DE)：Druckumformen (Walzen); Zugdruckumformen (Tiefziehen); Zugumformen (Längen); Biegeumformen (Abkanten); Schubumformen (Verdrehen, z.B. Feder winden).\nHinweis (DE)：Beim Umformen bleibt die Masse erhalten, Stoffzusammenhalt bleibt; Dichte kann sich ändern.\n中文题目：按“应力方式”列出 Umformen 的子类并各给一例。\n中文答案：压缩成形（Walzen）；拉压复合（Tiefziehen）；拉伸成形（Längen）；弯曲成形（Abkanten）；剪切/扭转成形（Verdrehen，例如绕制弹簧）。\n出处：FT 1 -  Einführung - Skript.pdf S.6; full.md (Abschnitt: Umformen – Spannungseinwirkung)"]
+["Nennen Sie wichtige Untergruppen der Hauptgruppe „Trennen“ nach DIN 8580.","Frage (DE)：Nennen Sie wichtige Untergruppen der Hauptgruppe „Trennen“ nach DIN 8580.\nAntwort (DE)：Zerteilen; Spanen mit geometrisch bestimmter Schneide; Spanen mit geometrisch unbestimmter Schneide; Abtragen; Zerlegen; Reinigen; Evakuieren (nicht endgültig definiert).\n中文题目：列出 DIN 8580 中 Trennen 的重要子分组。\n中文答案：分割 Zerteilen；切削 Spanen（几何确定刃/几何不确定刃）；去除 Abtragen；拆解 Zerlegen；清洗 Reinigen；抽空 Evakuieren（标准中说明未最终定义）。\n出处：FT 1 -  Einführung - Skript.pdf S.7 (Definition+Untergruppen) und S.4 (Übersicht); full.md (Abschnitt: Trennen – Untergruppen)"]
+["Nennen Sie die Kriteriengruppen bei der Verfahrensauswahl (nach Westkämper/Warnecke).","Frage (DE)：Nennen Sie die Kriteriengruppen bei der Verfahrensauswahl (nach Westkämper/Warnecke).\nAntwort (DE)：produktbezogen; verfahrensbezogen; wirtschaftlich; umwelttechnisch und sozial.\nTypische Beispiele (DE)：produktbezogen=Werkstoff/Qualität/Belastung; verfahrensbezogen=Werkstoffverbrauch/Energie/Automatisierbarkeit; wirtschaftlich=Rentabilität/Investition/Amortisation; Umwelt&sozial=Arbeitssicherheit/Umweltschutz.\n中文题目：按 Westkämper/Warnecke，工艺选择的 kriteriy 分哪四大类？\n中文答案：产品相关；工艺相关；经济性；环境与社会。\n出处：FT 1 -  Einführung - Skript.pdf S.12; full.md (Abschnitt: Kriterien bei der Verfahrensauswahl)"]
+["Begründen Sie: Warum hängt die Verfahrenswahl stark von der Stückzahl ab?","Frage (DE)：Begründen Sie: Warum hängt die Verfahrenswahl stark von der Stückzahl ab?\nAntwort (DE)：Serienfertigung: hohe Investition in Werkzeuge/Formen/Automatisierung lohnt sich durch Stückkostendegression (Amortisation); Einzel-/Kleinserie: flexible Verfahren ohne hohe Rüst-/Werkzeugkosten bevorzugt (schnell verfügbar, geringes Risiko).\n中文题目：解释：为什么“产量/件数”会强烈影响工艺选择？\n中文答案：批量生产可以把模具/专用刀具/自动化的高前期投入摊薄（单位成本下降、可回收投资）；单件/小批量更适合无需大投入、换型快的工艺（风险低、启动快）。\n出处：FT 1 -  Einführung - Skript.pdf S.12 (wirtschaftlich: Investition/Amortisation/Stückleistung); full.md (Kriterien Verfahrensauswahl); Garber_2025_10_02.txt (Beispiele/Einordnung, keine feste Page)"]
+["Warum ist die Werkstoffausnutzung bei spanenden Verfahren oft schlechter als bei Ur-/Umformen?","Frage (DE)：Warum ist die Werkstoffausnutzung bei spanenden Verfahren oft schlechter als bei Ur-/Umformen?\nAntwort (DE)：Spanen erzeugt Späne/Abtrag → Masseverlust; typische Werkstoffausnutzung deutlich geringer (ca. 40–50%); zusätzlich meist höherer Energiebedarf pro kg; Recycling möglich, aber Aufwand/Energie bleibt.\nZahlen (DE, aus Folie): Gießen ~90%, Sintern ~95%, Fließpressen ~85%, spanende Verfahren ~40–50%.\n中文题目：为什么切削（Spanen）往往比 Ur-/Umformen 的材料利用率更差？\n中文答案：切削会把材料以切屑/去除形式带走，导致工件质量减少；材料利用率通常明显更低（约 40–50%），且单位质量能耗往往更高；切屑虽可回收但仍需要额外能耗与流程成本。\n出处：FT 1 -  Einführung - Skript.pdf S.13 (Werkstoffausnutzung/Energiebedarf); full.md (Energie- und Ressourceneffizienz)"]
+["Welche Tendenz gilt allgemein: Umformen vs spanende Verfahren hinsichtlich Genauigkeit (ISO-IT)?","Frage (DE)：Welche Tendenz gilt allgemein: Umformen vs spanende Verfahren hinsichtlich Genauigkeit (ISO-IT)?\nAntwort (DE)：Je kleiner IT, desto genauer (µm-Abweichungen); spanende Verfahren erreichen i.d.R. kleinere IT als Umformen; Schleifen (z.B. Rundschleifen) gehört zu den genauesten spanenden Verfahren; Umformverfahren oft gröbere IT, mit Sondermaßnahmen besser erreichbar.\nHinweis (DE)：In der Folie sind „normal erreichbar“ und „mit Sondermaßnahmen erreichbar“ getrennt dargestellt.\n中文题目：一般趋势：Umformen 与 Spanen 在精度（ISO-IT）上如何比较？\n中文答案：IT 数字越小表示越精确（允许偏差以 µm 给出）；一般切削加工能达到更小的 IT（更高精度），磨削通常最精密；成形加工通常 IT 较大（精度较低），但通过特殊措施可改善。\n出处：FT 1 -  Einführung - Skript.pdf S.14–15 (ISO-Toleranzen, erreichbare IT); full.md (ISO-Toleranzen)"]
+["Was bedeuten die Rauheitskennwerte Ra und Rz?","Frage (DE)：Was bedeuten die Rauheitskennwerte Ra und Rz?\nAntwort (DE)：Ra: arithmetischer Mittelwert der Profilordinaten (Beträge) über die Messstrecke; Aussagekraft begrenzt (Spitzen/Täler wirken wenig auf Mittelwert). Rz: gemittelte Rautiefe = Mittelwert der Einzelrautiefen (Höhenunterschiede) über mehrere Einzelmessstrecken.\n中文题目：Ra 与 Rz 各表示什么？\n中文答案：Ra 是轮廓偏差（绝对值）的算术平均值，代表“平均粗糙度”；Rz 是多段采样得到的平均峰谷高度差（平均粗糙深度），对峰谷更敏感。\n出处：FT 1 -  Einführung - Skript.pdf S.16 (DIN EN ISO 4287); full.md (Rauheitskenngrößen); ft1_p17.png (Grafik/Beispiele, falls genutzt)"]
+["Was ist die Scherzone/Scherebene und was bedeutet „Spanstauchung (h1 > h)“?","Frage (DE)：Was ist die Scherzone/Scherebene und was bedeutet „Spanstauchung (h1 > h)“?\nAntwort (DE)：Scherzone/Scherebene: Bereich vor der Schneide, in dem das Material bei Erreichen der Grenzschubspannung plastisch abgeschert wird (starke Erwärmung). Spanstauchung: Span wird dicker als ungeschnittener Span (h1 > h); je größer, desto mehr Umformarbeit/Energie nötig (Reibung, Vorstauchung). Ablauf (Stichworte): elastische Verformung → Abscheren → (ggf.) Rissbildung → große Umformung → zusätzliche Energie durch Spanstauchung.\n中文题目：什么是剪切区/剪切面？“切屑压缩（h1>h）”意味着什么？\n中文答案：剪切区/剪切面是刀具前方材料达到临界剪应力后发生强塑性剪切的区域，并伴随强烈发热；切屑压缩 h1>h 表示切屑厚于未切削层，压缩越大需要的变形功/能量越多（摩擦、预压缩等）。\n出处：FT 2 - Grundlagen der Zerspanung Teil 1 - Skript.pdf S.4; full.md (Spanbildung und Spanstauchung)"]
+["Es gilt α + β + γ = 90°. Gegeben: α = 10°, β = 70°. Berechnen Sie γ.","Frage (DE)：Es gilt α + β + γ = 90°. Gegeben: α = 10°, β = 70°. Berechnen Sie γ.\nAntwort (DE)：γ = 90° − α − β = 90° − 10° − 70° = 10°.\nPrüfungshinweis (txt)：Dozent betont: α+β+γ bleibt 90° auch bei negativem γ.\n中文题目：已知 α+β+γ=90°，α=10°、β=70°，求 γ。\n中文答案：γ=10°。\n出处：FT 2 - Grundlagen der Zerspanung Teil 1 - Skript.pdf S.4–5 (α+β+γ=90°); full.md (Definitionen Schneidkeil); Garber_2025_10_02.txt (Hinweis: auch bei negativem γ gilt die Beziehung)"]
+["Skizzieren Sie den Schneidkeil in der Keilmessebene und beschriften Sie: Spanfläche, Freifläche, α, β, γ.","Frage (DE)：Skizzieren Sie den Schneidkeil in der Keilmessebene und beschriften Sie: Spanfläche, Freifläche, α, β, γ.\nAntwort (DE)：Keilmessebene: Seitenansicht auf die Schneide; Spanfläche: Fläche, über die der Span abläuft; Freifläche: Fläche, die der entstehenden Schnittfläche zugekehrt ist (Reibung vermeiden). α = Freiwinkel an der Freifläche; γ = Spanwinkel an der Spanfläche; β = Keilwinkel zwischen Span- und Freifläche; Beziehung: α+β+γ=90°.\n中文题目：在 Keilmessebene 画出刀具楔形，并标注：Spanfläche、Freifläche、α、β、γ。\n中文答案：在楔形测量平面画刀具侧视：切屑流过的面为 Spanfläche，靠近已加工表面且应避免摩擦的面为 Freifläche；α 为后角（在 Freifläche），γ 为前角（在 Spanfläche），β 为楔角（两面之间）；并注明 α+β+γ=90°。\n出处：FT 2 - Grundlagen der Zerspanung Teil 1 - Skript.pdf S.5 (Winkel) und S.7 (Flächendefinitionen); full.md (Schneidkeil/Flächen); Garber_2025_10_02.txt (häufige Fehler bei Beschriftung)"]
+["Wie ist der Spanwinkel γ richtig definiert (häufiger Fehler)?","Frage (DE)：Wie ist der Spanwinkel γ richtig definiert (häufiger Fehler)?\nAntwort (DE)：γ = Winkel zwischen Spanfläche (am Werkzeug) und der Senkrechten in der Keilmessebene; nicht zwischen Spanfläche und dem Span selbst; Spanfläche/Freifläche sind Werkzeugflächen.\n中文题目：γ（前角）的正确定义是什么（常见错误点）？\n中文答案：γ 是在楔形测量平面内，刀具前刀面（Spanfläche）与法线之间的夹角；常见错误是把它当成“前刀面与切屑本身”的夹角。并注意：Spanfläche/Freifläche都是刀具的面。\n出处：FT 2 - Grundlagen der Zerspanung Teil 1 - Skript.pdf S.5 (Definitionen) und S.7 (Spanfläche=Werkzeugfläche); full.md (Spanwinkel); Garber_2025_10_02.txt (Dozent nennt den typischen Fehler explizit)"]
+["Skizzieren Sie einen Schneidkeil mit negativem Spanwinkel (γ < 0) und nennen Sie die Wirkung.","Frage (DE)：Skizzieren Sie einen Schneidkeil mit negativem Spanwinkel (γ < 0) und nennen Sie die Wirkung.\nAntwort (DE)：Skizze: γ < 0 (Spanfläche gegen die Senkrechte „zurückgeneigt“), α+β+γ=90° bleibt gültig; Wirkung: Schneidkeil stabiler/robuster; begünstigt Reißspäne; ermöglicht Schruppbearbeitung; Nachteile: Schnittkräfte, Antriebsleistung und Wärmeentwicklung ↑.\n中文题目：画出 γ<0 的负前角刀具楔形，并说明影响。\n中文答案：负前角表示前刀面相对法线“向后倾”；仍满足 α+β+γ=90°。优点：刃口楔角更“厚”更稳定，适合粗加工，易形成裂断切屑；缺点：切削力、所需功率与发热上升。\n出处：FT 2 - Grundlagen der Zerspanung Teil 1 - Skript.pdf S.11 (kleiner/negativer Spanwinkel) und S.9 (Reißspan-Bedingungen); full.md (Wahl der Keilwinkel); Garber_2025_10_02.txt (Skizze/γ<0 wird betont)"]
+["Begründen Sie den Zielkonflikt: großer Spanwinkel vs kleiner/negativer Spanwinkel.","Frage (DE)：Begründen Sie den Zielkonflikt: großer Spanwinkel vs kleiner/negativer Spanwinkel.\nAntwort (DE)：Großer γ: begünstigt Fließspäne, gute Oberfläche, geringere Schnittkräfte, höhere Schnittgeschwindigkeiten möglich; aber Schneidkeil schwächer, Verschleiß ↑, Wärmeabfuhr aus der Schneide schlechter. Kleiner/negativer γ: stabilisiert Schneidkeil, Standzeit ↑, Schruppen möglich; aber Schnittkräfte/Antriebsleistung/Wärmeentwicklung ↑, Oberfläche tendenziell schlechter (Reißspan).\n中文题目：解释：大前角 vs 小/负前角的矛盾权衡。\n中文答案：大前角有利于形成流动切屑、表面更好、切削力更小、可用更高切削速度，但刀具楔形变薄、磨损增大、刃口散热变差；小/负前角使刃口更稳、寿命更长、适合粗加工，但切削力/功率/发热增加，且更可能出现裂断切屑导致表面变差。\n出处：FT 2 - Grundlagen der Zerspanung Teil 1 - Skript.pdf S.11 (Wahl der Keilwinkel) sowie S.9–10 (Spanformen/Oberfläche); full.md (Wahl der Keilwinkel)"]
+["Nennen Sie Werkzeugebene, Keilmessebene und Arbeitsebene und was man darin betrachtet.","Frage (DE)：Nennen Sie Werkzeugebene, Keilmessebene und Arbeitsebene und was man darin betrachtet.\nAntwort (DE)：Werkzeugebene: Ebene durch Schneidenpunkt, senkrecht zur Schnittrichtung (Blick von oben auf das Werkzeug). Keilmessebene: senkrecht zur Schneidebene, Blick von der Seite; dort werden α, β, γ am Keil gemessen. Arbeitsebene: gedachte Ebene mit Schnittrichtung und Vorschubrichtung (Bewegungsbezug). Kontext: Schneidebene enthält Hauptschneide und Schnittrichtung (liegt nahe Werkstückoberfläche unter dem Schnitt).\n中文题目：说出 Werkzeugebene、Keilmessebene、Arbeitsebene，并说明各自看什么。\n中文答案：Werkzeugebene：通过切削点且垂直于切削方向，用于从上往下看刀具；Keilmessebene：侧视刀具楔形，用来测 α/β/γ；Arbeitsebene：包含切削方向与进给方向的工作平面，用于描述运动关系。（补充：Schneidebene 含主切削刃与切削方向。）\n出处：FT 2 - Grundlagen der Zerspanung Teil 1 - Skript.pdf S.8; full.md (Bezugssysteme)"]
+["Verfahrenswahl: Schmieden/Umformen-Kette vs Gießen – welcher Vorteil/Nachteil?","Frage (DE)：Verfahrenswahl: Schmieden/Umformen-Kette vs Gießen – welcher Vorteil/Nachteil?\nAntwort (DE)：Schmieden/Umformen-Kette: i.d.R. höhere Qualität/Festigkeit, aber mehr Prozessschritte → Aufwand/Kosten/Termine ↑. Gießen-Kette: weniger Schritte → oft günstiger/schneller, aber ggf. schlechtere Eigenschaften/Genauigkeit → häufig Nachbearbeitung (Fräsen/Schleifen) nötig.\n中文题目：工艺选择：锻造/成形链 vs 铸造链，各自优缺点？\n中文答案：成形/锻造链通常能得到更高的强度与质量，但工序更多导致成本、时间与组织难度上升；铸造链更短通常更便宜更快，但性能/精度可能较差，往往需要后续机加工与磨削来达到要求。\n出处：FT 1 -  Einführung - Skript.pdf S.11 (Verfahrenskette-Vergleich) und S.12 (Kriterien); full.md (Verfahrenskette); Garber_2025_10_02.txt (Diskussion Qualität vs Kosten)"]
+["Welche Hilfsmittel (Formeln) bekommen Sie in der Prüfung laut Dozent?","Frage (DE)：Welche Hilfsmittel (Formeln) bekommen Sie in der Prüfung laut Dozent?\nAntwort (DE)：Formelblatt ist in der Klausur enthalten (laut Dozent meist als letzte Seite); Formeln daher nicht auswendig lernen, aber Anwendung/Einheiten sicher beherrschen.\n中文题目：老师说考试会给哪些公式资料？\n中文答案：考试会附带公式表（老师说通常作为最后一页），所以公式不必死背，但必须会正确代入并注意单位。\n出处：Garber_2025_10_02.txt (Aussage: Formelblatt in der Prüfung, letzte Seite); Formelblatt Fertigungstechnik.pdf S.1; full.md (Hinweise/Übersicht, falls enthalten)"]
+["Nennen Sie die drei Spanformen beim Spanen.","Frage (DE)：Nennen Sie die drei Spanformen beim Spanen.\nAntwort (DE)：Reiß- oder Bröckelspan; Scherspan; Fließspan.\n中文题目：请列出切削加工中的三种切屑形态。\n中文答案：裂断/崩碎切屑（Reiß- oder Bröckelspan）；剪切切屑（Scherspan）；流动切屑（Fließspan）。\n出处：FT 2 - Grundlagen der Zerspanung Teil 1 - Skript.pdf S.9–10 (Spanformen); full.md (Spanformen)"]
+["Was passiert bei spröden Werkstoffen bzw. bei kleinen/negativen Spanwinkeln und niedriger Schnittgeschwindigkeit – welche Spanform entsteht typischerweise und welche Oberfläche?","Frage (DE)：Was passiert bei spröden Werkstoffen bzw. bei kleinen/negativen Spanwinkeln und niedriger Schnittgeschwindigkeit – welche Spanform entsteht typischerweise und welche Oberfläche?\nAntwort (DE)：Typisch Reiß- oder Bröckelspan: Spanteile reißen ab, kaum Umformung; Bedingungen: spröde Werkstoffe (z.B. Guss, Bronze, Messing) oder bei zähen Werkstoffen bei niedriger v_c (bis 10 m/min) und kleinem bis negativem γ; Folgen: raue Oberfläche; geringe Schnittkräfte (wenig Umformarbeit).\n中文题目：脆性材料或“小/负前角 + 低切削速度”时，通常形成哪种切屑？表面如何？\n中文答案：通常形成裂断/崩碎切屑（Reiß-/Bröckelspan）：切屑块撕裂断开、塑性变形很小；典型在脆性材料（如铸铁、青铜、黄铜），或韧性材料在低切削速度（约≤10 m/min）且小到负前角时也会出现；表面更粗糙，但切削力相对较小。\n出处：FT 2 - Grundlagen der Zerspanung Teil 1 - Skript.pdf S.9 (Reiß-/Bröckelspan) und S.11 (klein/negativ γ); full.md (Reißspan); Garber_2025_10_02.txt (Dozent erwähnt spröde Werkstoffe → Bruchspan)"]
+["Ordnen Sie Schnittgeschwindigkeit \(v_c\) (grob) den Spanformen bei duktilen Werkstoffen zu.","Frage (DE)：Ordnen Sie Schnittgeschwindigkeit \(v_c\) (grob) den Spanformen bei duktilen Werkstoffen zu.\nAntwort (DE)：Mit steigender v_c und größer werdendem γ: Scherspan (ca. 20–80 m/min) → lamellenartig, Lamellen können wieder verschweißen. Bei hohen v_c (> 80 m/min) und großem γ: Fließspan → kontinuierlicher Span, beste Oberflächen, aber oft lange/unerwünschte Späne (z.B. Drehen/Bohren).\n中文题目：将切削速度 \(v_c\)（大致范围）与切屑形态对应起来（针对韧性材料）。\n中文答案：韧性材料中：切削速度升高并且前角增大时易形成剪切切屑（约 20–80 m/min，呈层片状，层片可能再焊接）；切削速度更高（>80 m/min）且前角较大时形成流动切屑（连续切屑、表面最好，但会产生很长的切屑，车削/钻削中常不希望）。\n出处：FT 2 - Grundlagen der Zerspanung Teil 1 - Skript.pdf S.10 (Scherspan/Fließspan) und S.11 (γ-Einfluss); full.md (Spanformen)"]
+  </script>
+
+  <script>
+    const STORAGE_KEY = "garber1-progress-v2";
+    const VALID_CHOICES = new Set(["unknown", "unsure", "known"]);
+    const raw = document.getElementById("sourceData").textContent.trim();
+
+    const state = {
+      cards: parseDeck(raw),
+      order: [],
+      index: 0,
+      flipped: false,
+      pendingChoice: null,
+      mode: "all",
+      lang: "both",
+      progress: loadProgress(),
+      query: ""
+    };
+
+    const el = {
+      deckCount: document.getElementById("deckCount"),
+      counter: document.getElementById("counter"),
+      progressBar: document.getElementById("progressBar"),
+      cardInner: document.getElementById("cardInner"),
+      questionDe: document.getElementById("questionDe"),
+      questionZh: document.getElementById("questionZh"),
+      answerGrid: document.getElementById("answerGrid"),
+      frontStatus: document.getElementById("frontStatus"),
+      backStatus: document.getElementById("backStatus"),
+      frontTag: document.getElementById("frontTag"),
+      backTag: document.getElementById("backTag"),
+      prevBtn: document.getElementById("prevBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      answerNextBtn: document.getElementById("answerNextBtn"),
+      shuffleBtn: document.getElementById("shuffleBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      searchInput: document.getElementById("searchInput"),
+      cardList: document.getElementById("cardList"),
+      visibleCount: document.getElementById("visibleCount"),
+      statSeen: document.getElementById("statSeen"),
+      statGood: document.getElementById("statGood"),
+      statAgain: document.getElementById("statAgain"),
+      statLeft: document.getElementById("statLeft")
+    };
+
+    state.order = buildOrder("all");
+    bindEvents();
+    render();
+
+    function parseDeck(text) {
+      return text
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map((line, index) => {
+          const safeLine = line.replace(/\\(?!["\\/bfnrtu])/g, "\\\\");
+          let pair;
+          try {
+            pair = JSON.parse(safeLine);
+          } catch (error) {
+            console.error("无法解析卡片", index + 1, error, line);
+            pair = [`Karte ${index + 1}`, line];
+          }
+          const sections = splitSections(pair[1] || "");
+          const extras = Object.entries(sections)
+            .filter(([key]) => !["Frage (DE)", "Antwort (DE)", "中文题目", "中文答案", "出处"].includes(key))
+            .map(([key, value]) => ({ label: key, value }));
+
+          return {
+            id: `card-${index + 1}`,
+            number: index + 1,
+            front: pretty(pair[0] || ""),
+            questionDe: pretty(sections["Frage (DE)"] || pair[0] || ""),
+            answerDe: pretty(sections["Antwort (DE)"] || ""),
+            questionZh: pretty(sections["中文题目"] || ""),
+            answerZh: pretty(sections["中文答案"] || ""),
+            source: pretty(sections["出处"] || ""),
+            extras: extras.map(extra => ({ label: extra.label, value: pretty(extra.value) })),
+            family: inferFamily(pair[0] || pair[1] || "")
+          };
+        });
+    }
+
+    function splitSections(text) {
+      const sections = {};
+      let current = "";
+      text.replace(/\\n/g, "\n").split(/\r?\n/).forEach(rawLine => {
+        const line = rawLine.trim();
+        if (!line) return;
+        const match = line.match(/^(.+?)\uFF1A(.*)$/u);
+        if (match) {
+          current = match[1].trim();
+          sections[current] = match[2].trim();
+        } else if (current) {
+          sections[current] += ` ${line}`;
+        }
+      });
+      return sections;
+    }
+
+    function inferFamily(text) {
+      if (/Scher|Span|Schneid|Werkzeug|Keil|Schnittgeschwindigkeit|Rauheit|Ra|Rz|α|β|γ/i.test(text)) {
+        return "FT2";
+      }
+      return "FT1";
+    }
+
+    function pretty(text) {
+      return String(text)
+        .replace(/\\\((.*?)\\\)/g, "$1")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function bindEvents() {
+      el.prevBtn.addEventListener("click", () => move(-1));
+      el.nextBtn.addEventListener("click", () => move(1));
+      el.answerNextBtn.addEventListener("click", advanceAfterAnswer);
+      el.shuffleBtn.addEventListener("click", shuffle);
+      el.resetBtn.addEventListener("click", resetProgress);
+      el.searchInput.addEventListener("input", event => {
+        state.query = event.target.value.trim().toLowerCase();
+        renderList();
+      });
+      document.querySelectorAll("[data-lang]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.lang = button.dataset.lang;
+          document.querySelectorAll("[data-lang]").forEach(item => item.classList.toggle("active", item === button));
+          render();
+        });
+      });
+      document.querySelectorAll("[data-mode]").forEach(button => {
+        button.addEventListener("click", () => setMode(button.dataset.mode));
+      });
+      document.querySelectorAll("[data-choice]").forEach(button => {
+        button.addEventListener("click", () => answerCard(button.dataset.choice));
+      });
+      window.addEventListener("keydown", event => {
+        if (event.target.matches("input")) return;
+        if (event.key === "ArrowRight") {
+          move(1);
+        } else if (event.key === "ArrowLeft") {
+          move(-1);
+        }
+      });
+    }
+
+    function buildOrder(mode) {
+      return state.cards
+        .map((card, index) => ({ card, index }))
+        .filter(({ card }) => mode !== "wrong" || isWrongActive(card))
+        .map(({ index }) => index);
+    }
+
+    function isWrongActive(card) {
+      const record = state.progress[card.id] || {};
+      return (record.wrongCount || 0) > 0 && record.rating !== "known";
+    }
+
+    function currentCard() {
+      if (!state.order.length) return null;
+      return state.cards[state.order[state.index]];
+    }
+
+    function render() {
+      const card = currentCard();
+      if (!card) {
+        renderEmptyState();
+        return;
+      }
+      const record = state.progress[card.id] || {};
+      el.deckCount.textContent = state.cards.length;
+      el.counter.textContent = `${state.index + 1} / ${state.order.length}`;
+      el.progressBar.style.width = `${((state.index + 1) / state.order.length) * 100}%`;
+      el.frontTag.textContent = `${state.mode === "wrong" ? "错题库" : card.family} · Frage`;
+      el.backTag.textContent = `${state.mode === "wrong" ? "错题库" : card.family} · Antwort`;
+      el.frontStatus.textContent = statusText(record.rating);
+      el.backStatus.textContent = statusText(record.rating);
+      el.answerNextBtn.disabled = false;
+      el.prevBtn.disabled = state.order.length <= 1;
+      el.nextBtn.disabled = state.order.length <= 1;
+      document.querySelectorAll("[data-choice]").forEach(button => {
+        button.disabled = false;
+      });
+
+      el.questionDe.textContent = card.questionDe || card.front;
+      el.questionZh.textContent = card.questionZh;
+      el.questionDe.classList.toggle("hidden", state.lang === "zh");
+      el.questionZh.classList.toggle("hidden", state.lang === "de" || !card.questionZh);
+
+      renderAnswer(card);
+      el.cardInner.classList.toggle("flipped", state.flipped);
+      renderModeButtons();
+      renderList();
+      renderStats();
+    }
+
+    function renderEmptyState() {
+      el.deckCount.textContent = state.cards.length;
+      el.counter.textContent = "0 / 0";
+      el.progressBar.style.width = "0%";
+      el.frontTag.textContent = state.mode === "wrong" ? "错题库" : "Frage";
+      el.backTag.textContent = state.mode === "wrong" ? "错题库" : "Antwort";
+      el.frontStatus.textContent = "无卡片";
+      el.backStatus.textContent = "无卡片";
+      el.questionDe.textContent = state.mode === "wrong" ? "错题库为空" : "没有卡片";
+      el.questionZh.textContent = state.mode === "wrong" ? "在全部卡片里点击“不知道”后，这里会出现错题。" : "";
+      el.questionDe.classList.remove("hidden");
+      el.questionZh.classList.toggle("hidden", !el.questionZh.textContent);
+      el.answerGrid.innerHTML = "";
+      el.cardInner.classList.remove("flipped");
+      el.answerNextBtn.disabled = true;
+      el.prevBtn.disabled = true;
+      el.nextBtn.disabled = true;
+      document.querySelectorAll("[data-choice]").forEach(button => {
+        button.disabled = true;
+      });
+      renderModeButtons();
+      renderList();
+      renderStats();
+    }
+
+    function renderAnswer(card) {
+      el.answerGrid.innerHTML = "";
+      if (state.lang !== "zh" && card.answerDe) {
+        el.answerGrid.appendChild(section("Antwort (DE)", card.answerDe, "answer-de"));
+      }
+      if (state.lang !== "de" && card.answerZh) {
+        el.answerGrid.appendChild(section("中文答案", card.answerZh, "answer-zh"));
+      }
+      card.extras.forEach(extra => {
+        el.answerGrid.appendChild(section(extra.label, extra.value, "extra"));
+      });
+      if (card.source) {
+        const source = document.createElement("div");
+        source.className = "source";
+        source.textContent = `出处：${card.source}`;
+        el.answerGrid.appendChild(source);
+      }
+    }
+
+    function section(label, value, className) {
+      const wrap = document.createElement("div");
+      wrap.className = `section ${className || ""}`;
+      const title = document.createElement("p");
+      title.className = "label";
+      title.textContent = label;
+      const body = document.createElement("p");
+      body.textContent = value;
+      wrap.append(title, body);
+      return wrap;
+    }
+
+    function renderList() {
+      const activeCard = currentCard();
+      const items = state.cards
+        .map((card, absoluteIndex) => ({ card, absoluteIndex }))
+        .filter(({ card }) => state.mode !== "wrong" || isWrongActive(card))
+        .filter(({ card }) => {
+          if (!state.query) return true;
+          return [card.questionDe, card.questionZh, card.answerDe, card.answerZh, card.source]
+            .join(" ")
+            .toLowerCase()
+            .includes(state.query);
+        });
+
+      el.visibleCount.textContent = `${items.length} / ${state.cards.length}`;
+      el.cardList.innerHTML = "";
+      items.forEach(({ card, absoluteIndex }) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `list-item ${activeCard && card.id === activeCard.id ? "active" : ""}`;
+        button.addEventListener("click", () => {
+          const orderIndex = state.order.indexOf(absoluteIndex);
+          state.index = orderIndex >= 0 ? orderIndex : 0;
+          state.flipped = false;
+          render();
+        });
+
+        const title = document.createElement("div");
+        title.className = "list-title";
+        title.textContent = card.questionDe;
+
+        const meta = document.createElement("div");
+        meta.className = "list-meta";
+        const left = document.createElement("span");
+        left.textContent = `${card.number}. ${card.family}`;
+        const right = document.createElement("span");
+        const record = state.progress[card.id] || {};
+        right.textContent = `${statusText(record.rating)}${record.wrongCount ? ` · 错${record.wrongCount}` : ""}`;
+        meta.append(left, right);
+        button.append(title, meta);
+        el.cardList.appendChild(button);
+      });
+    }
+
+    function renderStats() {
+      const records = state.cards.map(card => state.progress[card.id]).filter(Boolean);
+      const seen = records.length;
+      const good = records.filter(record => record.rating === "known").length;
+      const again = state.cards.filter(card => isWrongActive(card)).length;
+      el.statSeen.textContent = seen;
+      el.statGood.textContent = good;
+      el.statAgain.textContent = again;
+      el.statLeft.textContent = Math.max(state.cards.length - good, 0);
+    }
+
+    function move(delta) {
+      if (!state.order.length) return;
+      state.pendingChoice = null;
+      state.index = (state.index + delta + state.order.length) % state.order.length;
+      state.flipped = false;
+      render();
+    }
+
+    function shuffle() {
+      if (!state.order.length) return;
+      for (let i = state.order.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [state.order[i], state.order[j]] = [state.order[j], state.order[i]];
+      }
+      state.index = 0;
+      state.flipped = false;
+      state.pendingChoice = null;
+      render();
+    }
+
+    function answerCard(choice) {
+      if (!VALID_CHOICES.has(choice)) return;
+      const card = currentCard();
+      if (!card) return;
+      const previous = state.progress[card.id] || {};
+      state.progress[card.id] = {
+        ...previous,
+        rating: choice,
+        wrongCount: choice === "unknown" ? (previous.wrongCount || 0) + 1 : (previous.wrongCount || 0),
+        reviews: (previous.reviews || 0) + 1,
+        updatedAt: new Date().toISOString()
+      };
+      if (choice === "known") {
+        state.progress[card.id].knownAt = new Date().toISOString();
+      }
+      saveProgress();
+      state.pendingChoice = choice;
+      state.flipped = true;
+      render();
+    }
+
+    function advanceAfterAnswer() {
+      const choice = state.pendingChoice;
+      state.pendingChoice = null;
+
+      if (choice === "unsure") {
+        requeueCurrentRandomly();
+        return;
+      }
+
+      if (state.mode === "wrong" && choice === "known") {
+        state.order = buildOrder("wrong");
+        if (state.index >= state.order.length) state.index = 0;
+        state.flipped = false;
+        render();
+        return;
+      }
+
+      move(1);
+    }
+
+    function requeueCurrentRandomly() {
+      if (state.order.length <= 1) {
+        state.flipped = false;
+        render();
+        return;
+      }
+      const [current] = state.order.splice(state.index, 1);
+      const minInsert = Math.min(state.index + 1, state.order.length);
+      const insertAt = minInsert + Math.floor(Math.random() * (state.order.length - minInsert + 1));
+      state.order.splice(insertAt, 0, current);
+      if (state.index >= state.order.length) state.index = 0;
+      state.flipped = false;
+      render();
+    }
+
+    function setMode(mode) {
+      if (!["all", "wrong"].includes(mode)) return;
+      state.mode = mode;
+      state.order = buildOrder(mode);
+      state.index = 0;
+      state.flipped = false;
+      state.pendingChoice = null;
+      render();
+    }
+
+    function renderModeButtons() {
+      document.querySelectorAll("[data-mode]").forEach(button => {
+        button.classList.toggle("active", button.dataset.mode === state.mode);
+      });
+    }
+
+    function statusText(rating) {
+      return ({
+        unknown: "不知道",
+        unsure: "不熟练",
+        known: "知道"
+      })[rating] || "未复习";
+    }
+
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveProgress() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress));
+    }
+
+    function resetProgress() {
+      state.progress = {};
+      localStorage.removeItem(STORAGE_KEY);
+      state.order = buildOrder(state.mode);
+      state.index = 0;
+      state.flipped = false;
+      state.pendingChoice = null;
+      render();
+    }
+  </script>
+</body>
+</html>
