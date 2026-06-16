@@ -342,6 +342,32 @@
       overflow-wrap: anywhere;
     }
 
+    .section p br,
+    .zh br {
+      content: "";
+      display: block;
+      margin-top: 6px;
+    }
+
+    .math-var {
+      font-family: "Cambria Math", "STIX Two Math", "Times New Roman", serif;
+      font-style: italic;
+      white-space: nowrap;
+    }
+
+    .math-var sub,
+    .math-var sup,
+    .section sup,
+    .question sup,
+    .zh sup {
+      line-height: 0;
+    }
+
+    .math-sqrt {
+      font-family: "Cambria Math", "STIX Two Math", "Times New Roman", serif;
+      white-space: nowrap;
+    }
+
     .source {
       color: var(--muted);
       font-size: 13px;
@@ -1062,8 +1088,8 @@
         button.disabled = false;
       });
 
-      el.questionDe.textContent = card.questionDe || card.front;
-      el.questionZh.textContent = card.questionZh;
+      el.questionDe.innerHTML = renderRichText(card.questionDe || card.front);
+      el.questionZh.innerHTML = renderRichText(card.questionZh);
       el.questionDe.classList.toggle("hidden", state.lang === "zh");
       el.questionZh.classList.toggle("hidden", state.lang === "de" || !card.questionZh);
 
@@ -1083,8 +1109,8 @@
       el.backTag.textContent = `${emptyLabel} · Antwort`;
       el.frontStatus.textContent = "无卡片";
       el.backStatus.textContent = "无卡片";
-      el.questionDe.textContent = state.mode === "wrong" ? "错题库为空" : "没有卡片";
-      el.questionZh.textContent = state.mode === "wrong" ? "在刷题时点击“不知道”后，这里会出现错题。" : "";
+      el.questionDe.innerHTML = renderRichText(state.mode === "wrong" ? "错题库为空" : "没有卡片");
+      el.questionZh.innerHTML = renderRichText(state.mode === "wrong" ? "在刷题时点击“不知道”后，这里会出现错题。" : "");
       el.questionDe.classList.remove("hidden");
       el.questionZh.classList.toggle("hidden", !el.questionZh.textContent);
       el.answerGrid.innerHTML = "";
@@ -1114,7 +1140,7 @@
       if (card.source) {
         const source = document.createElement("div");
         source.className = "source";
-        source.textContent = `出处：${card.source}`;
+        source.innerHTML = renderRichText(`出处：${card.source}`);
         el.answerGrid.appendChild(source);
       }
     }
@@ -1126,9 +1152,64 @@
       title.className = "label";
       title.textContent = label;
       const body = document.createElement("p");
-      body.textContent = value;
+      body.innerHTML = renderRichText(value);
       wrap.append(title, body);
       return wrap;
+    }
+
+    function renderRichText(value) {
+      const normalized = normalizeFormulaText(value);
+      return formatFormulaHtml(escapeHtml(normalized)).replace(/\n/g, "<br>");
+    }
+
+    function normalizeFormulaText(value) {
+      return String(value || "")
+        .replace(/\\\((.*?)\\\)/g, "$1")
+        .replace(/\\text\{([^}]*)\}/g, "$1")
+        .replace(/\\kappa/g, "κ")
+        .replace(/\\gamma/g, "γ")
+        .replace(/\\alpha/g, "α")
+        .replace(/\\beta/g, "β")
+        .replace(/\\mu/g, "µ")
+        .replace(/\^\s*\\circ/g, "°")
+        .replace(/\\,/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatFormulaHtml(html) {
+      let output = html;
+
+      output = output.replace(/\^\(([^()<>]{1,60})\)/g, (_, exponent) => `<sup>${formatFormulaHtml(exponent)}</sup>`);
+      output = output.replace(/\^\{([^{}<>]{1,60})\}/g, (_, exponent) => `<sup>${formatFormulaHtml(exponent)}</sup>`);
+      output = output.replace(/\^([0-9+\-−.,A-Za-zα-ωΑ-Ω]{1,12})/g, (_, exponent) => `<sup>${formatFormulaHtml(exponent)}</sup>`);
+
+      output = output.replace(/\bkc1[,.]1\b/gi, () => mathVar("k", "c1,1"));
+      output = output.replace(/\b([A-Za-zα-ωΑ-Ω])_([A-Za-z0-9α-ωΑ-Ω,.\-−]{1,12})\b/g, (_, base, sub) => mathVar(base, sub));
+      output = output.replace(/\b(F|P)_?([cfpa])\b/g, (_, base, sub) => mathVar(base, sub));
+      output = output.replace(/\bv_?c\b/g, () => mathVar("v", "c"));
+      output = output.replace(/\bk_?c\b/g, () => mathVar("k", "c"));
+      output = output.replace(/\bK_?(ver|sch|gamma|γ|v)\b/g, (_, sub) => mathVar("K", sub === "gamma" ? "γ" : sub));
+      output = output.replace(/\bh_?0\b/g, () => mathVar("h", "0"));
+      output = output.replace(/\ba_?p\b/g, () => mathVar("a", "p"));
+      output = output.replace(/\bm_?c\b/g, () => mathVar("m", "c"));
+      output = output.replace(/\bt_?h\b/g, () => mathVar("t", "h"));
+      output = output.replace(/√\(([^()<>]{1,80})\)/g, (_, radicand) => `<span class="math-sqrt">√(${radicand})</span>`);
+
+      return output;
+    }
+
+    function mathVar(base, subscript) {
+      return `<span class="math-var">${base}<sub>${subscript}</sub></span>`;
     }
 
     function renderList() {
@@ -1161,7 +1242,7 @@
 
         const title = document.createElement("div");
         title.className = "list-title";
-        title.textContent = card.questionDe;
+        title.innerHTML = renderRichText(card.questionDe);
 
         const meta = document.createElement("div");
         meta.className = "list-meta";
