@@ -841,6 +841,20 @@
 ["Rohling Ø80 mm → Ziel Ø60 (L=120mm) und Ø30 (L=60mm), max. Zustellung \\(a_p=5mm\\), \\(n=400\\,min^{-1}\\), \\(f=0{,}5\\,mm/U\\), Anlauf+Überlauf je 5 mm. Berechnen Sie *th*.","Frage (DE)：Rohling Ø80 mm → Ziel Ø60 (L=120mm) und Ø30 (L=60mm), max. Zustellung \\(a_p=5mm\\), \\(n=400\\,min^{-1}\\), \\(f=0{,}5\\,mm/U\\), Anlauf+Überlauf je 5 mm. Berechnen Sie *th*.\nAntwort (DE)：- Wichtig: Zustellung ap ist radial, nicht im Durchmesser.\n- Ø80 → Ø60: Radius 40 → 30, Δr=10 mm; bei ap=5 mm → i1=2 Durchgänge.\n- Ø60 → Ø30: Radius 30 → 15, Δr=15 mm; bei ap=5 mm → i2=3 Durchgänge.\n- Länge Abschnitt Ø60: L1 = 120 + 5 + 5 = 130 mm.\n- Länge Abschnitt Ø30: L2 = 60 + 5 = 65 mm, kein Überlauf am Bund.\n- Gesamtweg: Lges = 2·130 + 3·65 = 455 mm.\n- Vorschubgeschwindigkeit: n·f = 400·0,5 = 200 mm/min.\n- Hauptzeit: th = 455/200 = 2,275 min ≈ 136,5 s.\n- Nur Hauptzeit Schruppen; Nebenzeiten nicht enthalten.\n中文题目：毛坯 Ø80，加工到 Ø60（长120mm）和 Ø30（长60mm），最大切深 ap=5mm，n=400 min⁻¹，f=0.5 mm/转，引入/越程各 5mm，求主时间 th。\n中文答案：- 关键：ap 是半径方向，不是直径方向。\n- Ø80→Ø60：半径 40→30，减少 10mm，ap=5mm，所以 2 刀。\n- Ø60→Ø30：半径 30→15，减少 15mm，所以 3 刀。\n- Ø60 段长度：L1=120+5+5=130mm。\n- Ø30 段长度：L2=60+5=65mm，台肩处无越程。\n- 总进给路程：Lges=2·130+3·65=455mm。\n- 进给速度：n·f=400·0.5=200mm/min。\n- 主时间：th=455/200=2.275min≈136.5s。\n- 这里只算粗车主时间，不含辅助时间。\n出处：FT 3 - Drehen - Skript.pdf S.19, S.22, S.23；full.md Abschnitt \"Aufgaben zum Drehen / Aufgabe 1\"；Garber_2025_10_23.txt（老师强调 ap 为半径向，Ø80→Ø60 是 2 刀不是 4 刀；总路程 455mm）。"]
 ["Unterscheiden Sie Hauptzeit und Nebenzeit. Was ist „Eilgang“?","Frage (DE)：Unterscheiden Sie Hauptzeit und Nebenzeit. Was ist „Eilgang“?\nAntwort (DE)：- Hauptzeit: Zeit, in der tatsächlich zerspant wird; Spanbildung/Bearbeitung, in der Skizze H.\n- Nebenzeit: nicht spanende Zeiten innerhalb des Zyklus, z.B. Werkstückwechsel und -spannung, Spindel beschleunigen, Kühlschmierstoff einschalten, Werkzeugwechsel.\n- Bewegungsbeispiele Nebenzeit: Anfahren im Eilgang, Zustellen, Abheben, Rücklauf im Eilgang.\n- Eilgang: schnelle nichtschneidende Verfahrbewegung der Maschine; dient zum Positionieren/Rückfahren, nicht zur Bearbeitung.\n- Zykluszeit Serienfertigung: Summe aus Hauptzeiten und Nebenzeiten.\n中文题目：区分主时间和辅助时间；Eilgang（快速移动）是什么？\n中文答案：- 主时间：真正切削、产生切屑的时间，图中标 H。\n- 辅助时间：循环中不切削的时间，如换件/夹紧、主轴加速、开冷却液、换刀。\n- 辅助运动例子：快速接近、进刀定位、抬刀、快速返回。\n- Eilgang 是机床非切削快速移动，用于定位或返回，不用于加工。\n- 批量生产循环时间=各工序主时间+辅助时间。\n出处：FT 3 - Drehen - Skript.pdf S.20, S.21；full.md Abschnitt \"Zykluszeit und Nebenzeiten\"；Garber_2025_10_23.txt（老师讲 Zykluszeit/Nebenzeit 和空走 Eilgang）。"]
 ["Geben Sie die Kienzle-Gleichung zur Schnittkraftberechnung an (mit Tabellenwerten).","Frage (DE)：Geben Sie die Kienzle-Gleichung zur Schnittkraftberechnung an (mit Tabellenwerten).\nAntwort (DE)：- Spanungsquerschnitt: A = ap·f = b·h.\n- Geometrie beim Drehen: h = f·sinκ; b = ap/sinκ.\n- Spezifische Schnittkraft: kc = Fc/A = Fc/(b·h).\n- Kienzle ohne Korrekturfaktoren: Fc = kc1.1·b·h0·(h/h0)^(1-mc) = kc1.1·b·h·(h/h0)^(-mc), meist h0 = 1 mm.\n- Mit Korrekturfaktoren: Fc = kc1.1·b·h0·Kv·Kver·Kγ·Ksch·(h/h0)^(1-mc).\n- Tabellenwerte: kc1.1 und 1-mc bzw. mc aus Werkstofftabelle; Einheiten N/mm² und mm → Ergebnis N.\n- Korrekturfaktoren: Kv Schnittgeschwindigkeit, Kver Werkzeugverschleiß, Kγ Spanwinkel, Ksch Schneidstoff.\n- Rechenablauf: h,b bestimmen → Werkstoffwerte ablesen → Korrekturfaktoren nur anwenden, wenn gefordert → Einheit prüfen.\n中文题目：写出 Kienzle 切削力计算公式（含表格参数）。\n中文答案：- 切削截面积：A=ap·f=b·h。\n- 车削几何：h=f·sinκ；b=ap/sinκ。\n- 比切削力：kc=Fc/A=Fc/(b·h)。\n- 无修正系数：Fc=kc1.1·b·h0·(h/h0)^(1-mc)=kc1.1·b·h·(h/h0)^(-mc)，通常 h0=1mm。\n- 含修正系数：Fc=kc1.1·b·h0·Kv·Kver·Kγ·Ksch·(h/h0)^(1-mc)。\n- 表格读取 kc1.1 和 1-mc/或 mc；N/mm² 与 mm 相乘，结果为 N。\n- 修正系数含义：Kv 切削速度，Kver 刀具磨损，Kγ 前角，Ksch 刀具材料。\n- 解题步骤：先算 h、b → 查材料表 → 只在题目要求时加修正系数 → 检查单位。\n出处：FT 2 - Grundlagen der Zerspanung Teil 2 - Skript.pdf S.22-S.26；Formelblatt Fertigungstechnik.pdf S.1；full.md Abschnitt \"Prüfungsaufgabe Kienzle / Schnittkraftberechnung\"；Garber_2025_10_23.txt（老师明确说 Schnittkraftbestimmung/Kienzle 经常/一定会考）。"]
+["Nennen Sie den Unterschied zwischen Bohren ins Volle und Aufbohren und begründen Sie, warum Aufbohren genauer ist.", "Frage (DE)：Nennen Sie den Unterschied zwischen Bohren ins Volle und Aufbohren und begründen Sie, warum Aufbohren genauer ist.\nAntwort (DE)：- Bohren ins Volle: Rundbohren ohne Vorbohrung, Werkzeug startet im Vollmaterial.\n- Aufbohren: vorhandene Bohrung wird auf größeren Durchmesser vergrößert.\n- Begründung: beim Bohren ins Volle gilt an der Drehachse v_c → 0; dort schneidet der Bohrer kaum, sondern drückt/verdrängt Material; Querschneide/Bohrermitte erzeugt hohe Vorschub- bzw. Axialkraft.\n- Folge: schlechtere Maßgenauigkeit und Oberfläche; Aufbohren vermeidet den kritischen Zentrumsschnitt weitgehend → geringere Kräfte, bessere IT/Rz.\n中文题目：说明“实心钻孔”和“扩孔”的区别，并解释为什么扩孔更精确。\n中文答案：- 实心钻孔：无预孔，直接在实料中钻出圆柱内表面。\n- 扩孔：已有孔，再把孔扩大。\n- 原因：钻头中心处切削速度 v_c 接近0，中心/横刃不是有效切削而是挤压材料，轴向力很大。\n- 结果：实心钻孔表面和尺寸精度较差；扩孔时中心问题减弱，所以更容易得到较好精度和表面。\n出处：Garber_2025_10_30.txt（老师讲 Bohren/Aufbohren 与中心速度为0的机制）；FT 4 - Bohren - Skript.pdf S.5；full.md Abschnitt \"4.1 Einleitung - Erreichbare Genauigkeiten - Vollbohren und Aufbohren"]
+["Nennen Sie erreichbare ISO-Toleranz (IT) und Rautiefe Rz für Vollbohren, Aufbohren, Senken und Reiben.", "Frage (DE)：Nennen Sie erreichbare ISO-Toleranz (IT) und Rautiefe Rz für Vollbohren, Aufbohren, Senken und Reiben.\nAntwort (DE)：- Bohren ins Volle: IT 12, Rz ≈ 40 µm.\n- Aufbohren: IT 10, Rz ≈ 4 µm.\n- Senken: IT 9, Rz ≈ 8 µm.\n- Reiben: IT 6, Rz ≈ 2 µm.\n- Prüfungsfalle: Rz ist Rautiefe in µm, nicht Ra; Zahlen als erreichbare Richtwerte aus der Tabelle lernen.\n中文题目：列出实心钻孔、扩孔、沉孔、铰孔可达到的 ISO 公差等级 IT 与粗糙度 Rz。\n中文答案：- 实心钻孔：IT12，Rz≈40 µm。\n- 扩孔：IT10，Rz≈4 µm。\n- 沉孔：IT9，Rz≈8 µm。\n- 铰孔：IT6，Rz≈2 µm。\n- 易错点：这里是 Rz（µm），不是 Ra。\n出处：Garber_2025_10_30.txt（老师围绕 Bohrverfahren 表格讲解）；FT 4 - Bohren - Skript.pdf S.5；full.md Abschnitt \"Erreichbare Genauigkeiten - Vollbohren und Aufbohren"]
+["Begründen Sie die schlechtere Oberfläche/Genauigkeit beim Bohren ins Volle.", "Frage (DE)：Begründen Sie die schlechtere Oberfläche/Genauigkeit beim Bohren ins Volle.\nAntwort (DE)：- v_c = π·d·n; lokal am Bohrerzentrum ist der wirksame Durchmesser d = 0, daher v_c = 0.\n- In der Mitte kein sauberer Schnitt; Querschneide drückt/verdrängt Material.\n- Deutlich höhere Vorschub-/Axialkräfte als beim Aufbohren.\n- Folgen: größere Bohrungsabweichung, schlechtere Oberfläche/Rautiefe, geringere Genauigkeit.\n- Wichtig: nicht die Drehzahl n ist Null, sondern die Schnittgeschwindigkeit auf der Drehachse.\n中文题目：解释为什么实心钻孔的表面质量和精度较差。\n中文答案：- 公式 v_c = π·d·n，在钻头中心局部直径 d=0，所以中心切削速度为0。\n- 中心/横刃处不能真正切削，主要挤压材料。\n- 进给力/轴向力比扩孔大得多。\n- 结果：孔偏差更大、表面粗糙度更差、精度更低。\n- 易错点：不是转速 n 为0，而是旋转轴线处的切削速度为0。\n出处：Garber_2025_10_30.txt（老师强调 Bohren ins Volle 的中心不切削问题）；FT 4 - Bohren - Skript.pdf S.5；FT 3 - Drehen - Skript.pdf S.22（v_c = π·n·d）；full.md Abschnitt \"4.1 Einleitung"]
+["Skizzieren/benennen Sie am Spiralbohrer: Hauptschneiden, Spanfläche, Freifläche und Querschneide.", "Frage (DE)：Skizzieren/benennen Sie am Spiralbohrer: Hauptschneiden, Spanfläche, Freifläche und Querschneide.\nAntwort (DE)：- Zwei Hauptschneiden: gegenüberliegend an der Bohrerspitze; erzeugen den Hauptschnitt.\n- Spanfläche: Fläche/Spannutseite, über die der Span abläuft; Spannuten dienen auch Span- und KSS-Abfuhr.\n- Freifläche: Fläche hinter der Schneide, der erzeugten Schnittfläche zugekehrt; bildet Freiwinkel und verhindert Reiben.\n- Querschneide: Verbindung der Hauptschneiden im Zentrum; kritisch, weil v_c ≈ 0, daher eher Drücken als Schneiden.\n- Skizzenpunkte: Spitze, beide Hauptschneiden, zentrale Querschneide, Spannut/Spanfläche, Freifläche eindeutig beschriften.\n中文题目：在麻花钻上画出/标出：主切削刃、前刀面、后刀面和横刃。\n中文答案：- 两条主切削刃：位于钻尖，两侧相对。\n- 前刀面：切屑沿其流出的表面；在麻花钻上与螺旋排屑槽相关。\n- 后刀面：在切削刃后方、面对已加工表面，形成后角，避免摩擦。\n- 横刃：中心连接两主刃的位置；因中心 v_c≈0，主要挤压而非切削。\n- 作图评分点：必须清楚标出钻尖、两主刃、中心横刃、排屑槽/前刀面、后刀面。\n出处：Garber_2025_10_30.txt（老师让识别 Bohrergeometrie）；FT 4 - Bohren - Skript.pdf S.6-S.8, S.10-S.11；FT 2 - Grundlagen der Zerspanung Teil 1 - Skript.pdf S.6-S.8（Spanfläche/Freifläche 定义）；full.md Abschnitt \"4.2 Bohrwerkzeuge - Spiral- oder Wendelbohrer / Geometrie"]
+["Warum braucht der Spiralbohrer einen Kompromiss zwischen Kern und Spannut?", "Frage (DE)：Warum braucht der Spiralbohrer einen Kompromiss zwischen Kern und Spannut?\nAntwort (DE)：- Kern: massive zylindrische Mitte; bestimmt Stabilität, Bruchsicherheit und nutzbares Drehmoment.\n- Großer Kern: stabiler Bohrer, höheres Drehmoment möglich; aber kleinere Spannuten → schlechtere Span- und Kühlschmierstoffabfuhr.\n- Große Spannut: bessere Spanabfuhr/KSS-Zufuhr; aber kleinerer Kern → schwächerer Bohrer, geringere Steifigkeit.\n- Kompromiss: Stabilität/Drehmoment gegen Spanraum/Spantransport.\n中文题目：为什么麻花钻的钻芯和排屑槽必须折中设计？\n中文答案：- 钻芯：钻头中间的实体圆柱部分，决定稳定性、抗折断能力和可承受扭矩。\n- 钻芯大：更稳定、能传递更大扭矩；但排屑槽小，排屑和冷却润滑变差。\n- 排屑槽大：排屑/KSS 更好；但钻芯变小，钻头变弱。\n- 核心评分点：稳定性/扭矩 vs 排屑空间/排屑能力。\n出处：Garber_2025_10_30.txt（老师讲 Kern-Spannut 折中）；FT 4 - Bohren - Skript.pdf S.10；full.md Abschnitt \"4.2 Bohrwerkzeuge - Aufbau des Spiralbohrers"]
+["Welche Funktion hat der Spitzenwinkel, und warum ist er ein Kompromiss?", "Frage (DE)：Welche Funktion hat der Spitzenwinkel, und warum ist er ein Kompromiss?\nAntwort (DE)：- Spitzenwinkel beeinflusst Zentrierverhalten und Bohrungsgrund.\n- Kleiner Spitzenwinkel: bessere Zentrierung/Führung in der Bohrung; aber am Bohrungsgrund bleibt ein größerer nicht vollständig ausgebohrter Kegelbereich.\n- Größerer/stumpferer Spitzenwinkel: kürzerer Spitzenbereich und stabilere Spitze; aber schlechtere Selbstzentrierung, höhere Gefahr des Verlaufens.\n- Kompromiss: Zentrierung/Führung gegen nutzbare Bohrungstiefe/Bohrungsgrund und Stabilität.\n中文题目：顶角的作用是什么？为什么它是一个折中？\n中文答案：- 顶角影响钻头定心、导向和孔底形状。\n- 顶角小：定心/导向更好；但孔底会留下更大的未完全钻出的锥形区域。\n- 顶角大/钝：尖端区域短、稳定性较好；但自定心较差，容易跑偏。\n- 核心评分点：定心/导向 vs 孔底有效形状/稳定性。\n出处：Garber_2025_10_30.txt（老师讲 Spitzenwinkel 的折中）；FT 4 - Bohren - Skript.pdf S.10；full.md Abschnitt \"Aufbau des Spiralbohrers - Spitzenwinkel"]
+["Nennen Sie Vorteile und typische Einsatzgrenzen von Wendeplattenbohrern.", "Frage (DE)：Nennen Sie Vorteile und typische Einsatzgrenzen von Wendeplattenbohrern.\nAntwort (DE)：- Vorteile: ab ca. Ø 12 mm kosteneffizient; schneller Austausch verschlissener Schneiden; Wendeschneidplatten für Hauptschneiden, in Ausnahmefällen auch für Querschneide.\n- Typischer Einsatz: Aufbohren bzw. größere Durchmesser/Serien, weil Schneidenwechsel schnell und wirtschaftlich ist.\n- Einsatzgrenze: Vollbohren nur, wenn die Plattengeometrie auch den Zentrumsschnitt/Querschneidenbereich abdeckt; sonst bleibt Zentrum kritisch.\n- Merksatz: Hauptvorteil = wirtschaftlicher Schneidenwechsel; Hauptgrenze = Zentrumsschnitt/kleine Durchmesser.\n中文题目：列出可转位钻的优点和典型适用限制。\n中文答案：- 优点：约 Ø12 mm 起经济性好；磨损刀片可快速更换；刀片用于主切削刃，特殊情况下也可用于横刃。\n- 典型用途：扩孔或较大直径/批量加工，因为换刃快、成本低。\n- 限制：只有刀片布置能覆盖中心切削/横刃区域时才适合实心钻孔；否则中心仍是问题。\n- 记忆点：优势=快速经济换刃；限制=中心切削和小直径。\n出处：Garber_2025_10_30.txt（老师讲 Wendeplattenbohrer 是否能 Vollbohren 的判断）；FT 4 - Bohren - Skript.pdf S.13；full.md Abschnitt \"4.2 Bohrwerkzeuge - Wendeplattenbohrer"]
+["Wozu dient Senken, und welche Senker-Typen gibt es?", "Frage (DE)：Wozu dient Senken, und welche Senker-Typen gibt es?\nAntwort (DE)：- Zweck: Erzeugen von Planflächen senkrecht zur Drehachse oder Kegelflächen symmetrisch zur Drehachse; oft kombiniert mit Bohrungen.\n- Typische Anwendungen: Schraubenkopfsenkungen, Planansenken/Planeinsenken, Fasen/Kanten, Profilsenken.\n- Typen: Spitzsenker, Zapfsenker mit Führungszapfen, Formsenker/Profilsenker.\n- Schneidstoffe: hauptsächlich HSS; Hartmetall vor allem in Großserienfertigung.\n中文题目：沉孔/锪孔的目的是什么？有哪些沉孔刀类型？\n中文答案：- 目的：加工垂直于旋转轴线的平面或与旋转轴对称的锥面，常与孔加工结合。\n- 应用：螺钉头沉孔、平面锪孔/沉台、倒角、成形沉孔。\n- 类型：尖沉头刀、带导向柱的柱形沉头刀、成形/轮廓沉头刀。\n- 刀具材料：主要 HSS，大批量时可用硬质合金。\n出处：Garber_2025_10_30.txt（老师讲 Senken 分类和用途）；FT 4 - Bohren - Skript.pdf S.14；05_FT_Bohrverfahren.pdf Thema \"Plansenken / Profilbohren\"；full.md Abschnitt \"Bohrverfahren - Senken / Senkwerkzeuge"]
+["Was verbessert Reiben - und was kann Reiben nicht verbessern? (Nennen Sie auch typische Reibzugabe.)", "Frage (DE)：Was verbessert Reiben - und was kann Reiben nicht verbessern? (Nennen Sie auch typische Reibzugabe.)\nAntwort (DE)：- Reiben: Aufbohren mit vielschneidiger Reibahle; vorgebohrte Bohrung wird auf Passungsmaß gebracht.\n- Verbessert: Maß-/Passgenauigkeit (typisch IT6-IT7), Oberfläche/Oberflächengüte, Formqualität.\n- Typische Reibzugabe: prüfungsnah 0,1-0,5 mm; Schnittgeschwindigkeit ca. halb so groß wie beim Bohren; ein Durchgang.\n- Kann nicht verbessern: Lagegenauigkeit/Position der Bohrung; eine falsch liegende Bohrung wird durch Reiben nicht korrekt positioniert.\n中文题目：铰孔能改善什么？不能改善什么？并说明典型铰余量。\n中文答案：- 铰孔：用多刃铰刀对预钻孔进行扩孔，使孔达到配合尺寸。\n- 能改善：尺寸/配合精度（典型 IT6-IT7）、表面质量、形状质量。\n- 典型铰余量：考试按 0.1-0.5 mm；切削速度约为钻孔的一半；通常一次通过。\n- 不能改善：孔的位置精度/位置度；孔钻偏了，铰孔不能把位置纠正回来。\n出处：Garber_2025_10_30.txt（老师强调 Reiben 能改善与不能改善的边界）；FT 4 - Bohren - Skript.pdf S.15；05_FT_Bohrverfahren.pdf Abschnitt \"Reiben\"；full.md Abschnitt \"Reiben"]
+["Vergleichen Sie Spannschraube, Schrumpffutter und (Hydro-)Dehnspannfutter (Präzision/Handhabung).", "Frage (DE)：Vergleichen Sie Spannschraube, Schrumpffutter und (Hydro-)Dehnspannfutter (Präzision/Handhabung).\nAntwort (DE)：- Spannschraube: einfach/günstig, schnelle Befestigung; einseitige Klemmung → geringere Rundlaufgenauigkeit/Präzision, für hohe Genauigkeit ungünstig.\n- Schrumpffutter: Aufnahme induktiv erwärmen, kalten Werkzeugschaft einsetzen, nach Abkühlen kraftschlüssig gespannt; Präzision sehr gut, Drehmomentübertragung sehr gut, Zugänglichkeit sehr gut; Handhabung nur akzeptabel, weil Aufheizen/Abkühlen/Gerät nötig.\n- (Hydro-)Dehnspannfutter: Betätigungsschraube drückt Öl in Kammer, dünnwandige Aufnahme klemmt Werkzeug; sehr gute Rundlaufgenauigkeit, sehr gute Dämpfung, Handhabung sehr gut; teuer/aufwändig, aber für präzise/dynamisch kritische Bearbeitung gut.\n- Vergleichstabelle: Hydro-Dehnspannfutter und Schrumpffutter jeweils Präzision \"sehr gut\"; Kraftspannfutter \"gut\"; Spannzangenfutter \"akzeptabel\".\n中文题目：比较侧向紧固螺钉刀柄、热缩刀柄和液压胀紧刀柄（精度/操作）。\n中文答案：- 侧向紧固螺钉：简单便宜、装夹快；单侧夹紧导致跳动/精度较差，不适合高精度。\n- 热缩刀柄：感应加热刀柄→插入冷刀柄→冷却后力锁合；精度很高、扭矩传递好、可达性好；但需加热/冷却设备，操作性一般。\n- 液压胀紧刀柄：螺钉压油腔，使薄壁夹套夹紧刀具；跳动精度和阻尼很好，操作方便；成本/结构较高，适合高精度和易振加工。\n- 表格记忆：液压胀紧和热缩精度都是“sehr gut”。\n出处：Garber_2025_10_30.txt（老师讲 Werkzeugaufnahme 对精度影响）；FT 4 - Bohren - Skript.pdf S.20-S.23；full.md Abschnitt \"Futter mit Spannschraube und Schrumpffutter / (Hydro-) Dehnspannfutter / Vergleich von Werkzeugaufnahmen"]
+["Definieren Sie Zahnvorschub f_z und geben Sie den Zusammenhang zu f an. Was sagt f_z physikalisch aus?", "Frage (DE)：Definieren Sie Zahnvorschub f_z und geben Sie den Zusammenhang zu f an. Was sagt f_z physikalisch aus?\nAntwort (DE)：- Zusammenhang: f = f_z·z, mit z = Schneidenzahl.\n- f_z: Zahnvorschub, Vorschub pro Zahn/Schneide, Einheit typ. mm/Zahn.\n- f: Vorschub pro Umdrehung, Einheit typ. mm/U.\n- Physikalische Bedeutung: Belastung bzw. Spanabnahme pro Schneide; wichtig für Hauptzeit und Werkzeugbelastung.\n- Prüfungsfalle: f_z nicht direkt in T_H = (L·i)/(n·f) einsetzen; zuerst mit z zu f umrechnen. Vorschubgeschwindigkeit wäre v_f = n·f.\n中文题目：定义齿进给 f_z，写出它与 f 的关系，并说明物理意义。\n中文答案：- 关系：f = f_z·z，z 为刃数。\n- f_z：每齿/每刃进给，单位通常 mm/Zahn。\n- f：每转进给，单位通常 mm/U。\n- 物理意义：每个切削刃承担的进给量/负载，影响切屑厚度、主时间和刀具负荷。\n- 易错点：主时间公式 T_H = (L·i)/(n·f) 里用的是 f，不能直接把 f_z 代进去；要先乘刃数。\n出处：Garber_2025_10_30.txt（老师强调 Zahnvorschub 与 Gesamtvorschub 的区别）；Formelblatt Fertigungstechnik.pdf S.1；FT 4 - Bohren - Skript.pdf S.30；full.md Abschnitt \"Formelblatt Fertigungstechnik - Vollbohren / Aufbohren"]
+["Berechnen Sie Drehzahl n, Vorschub f, Hauptzeit T_H und Kosten bei 100 €/h. Gegeben: i=300, d=12 mm, L=50 mm, v_c=150 m/min, f_z=0,1 mm, z=2.", "Frage (DE)：Berechnen Sie Drehzahl n, Vorschub f, Hauptzeit T_H und Kosten bei 100 €/h. Gegeben: i=300, d=12 mm, L=50 mm, v_c=150 m/min, f_z=0,1 mm, z=2.\nAntwort (DE)：- Drehzahl: d=12 mm=0,012 m; v_c = π·d·n ⇒ n = 150/(π·0,012) = 3978,9 min^(-1) ≈ 3980 min^(-1).\n- Vorschub pro Umdrehung: f = f_z·z = 0,1·2 = 0,2 mm/U.\n- Gesamtweg: L·i = 50 mm·300 = 15000 mm.\n- Hauptzeit: T_H = (L·i)/(n·f) = 15000/(3978,9·0,2) = 18,85 min ≈ 18,8 min.\n- Kosten: 18,85/60·100 = 31,4 € → ca. 31 €.\n- Prüfungsfallen: Durchmesser in m für v_c verwenden; f_z erst zu f umrechnen; nur Hauptzeit, Nebenzeiten vernachlässigt; Einheiten sauber angeben.\n中文题目：计算转速 n、每转进给 f、主时间 T_H 和 100 €/h 下的成本。\n中文答案：- 转速：d=12mm=0.012m，n=150/(π·0.012)=3978.9 min^(-1)≈3980 min^(-1)。\n- 每转进给：f=f_z·z=0.1·2=0.2 mm/U。\n- 总进给路程：L·i=50mm·300=15000mm。\n- 主时间：T_H=15000/(3978.9·0.2)=18.85min≈18.8min。\n- 成本：18.85/60·100=31.4€，约 31€。\n- 易错点：计算 v_c 时直径用 m；先把 f_z 乘刃数变成 f；这里只算主时间，不算辅助时间。\n出处：Garber_2025_10_30.txt（老师明确此类 Hauptzeit/Kosten 计算是考试口径并强调只算 Hauptzeit）；FT 4 - Bohren - Skript.pdf S.30；FT 3 - Drehen - Skript.pdf S.22；Formelblatt Fertigungstechnik.pdf S.1；full.md Abschnitt \"4.4 Hauptzeitberechnung"]
+["Begründen Sie, warum die Kosten aus T_H bei Einzelteilen stark unterschätzt werden.", "Frage (DE)：Begründen Sie, warum die Kosten aus T_H bei Einzelteilen stark unterschätzt werden.\nAntwort (DE)：- T_H ist nur die Zeit, in der tatsächlich zerspant wird.\n- Nicht enthalten: Rüsten, Werkstück ein-/ausspannen, Positionieren/Anfahren, Zustellen/Abheben/Rücklauf, Werkzeugwechsel, KSS einschalten, Messen/Prüfen, Reinigen, Handling/Logistik, Programmieren.\n- Bei Einzelteilen/Kleinserien sind Neben- und Rüstzeiten oft größer als die reine Hauptzeit.\n- Maschinenstundensatz bildet nur maschinenabhängige Kosten pro Laufzeit ab; reale Fertigungskosten enthalten zusätzlich variable Kosten, Bedienerlohn, Werkzeuge, Energie/Medien usw.\n- Ergebnis: Kosten = T_H·Stundensatz liefert nur eine Untergrenze/vereinfachte Prüfungsrechnung.\n中文题目：说明为什么用主时间 T_H 算单件成本会严重低估。\n中文答案：- T_H 只表示真正切削的时间。\n- 不包含：装夹、找正、定位/快进、进刀/退刀、回程、换刀、开冷却、测量检验、清理、搬运物流、编程等。\n- 单件/小批量时，辅助时间和准备时间往往比主切削时间还大。\n- 机床小时费率只是按机床运行时间分摊的一部分成本；真实成本还包括人工、刀具、能源、介质等。\n- 所以 Kosten=T_H·Stundensatz 只是考试中的简化下限。\n出处：Garber_2025_10_30.txt（老师口头强调只算 Hauptzeit 会低估真实成本）；FT 3 - Drehen - Skript.pdf S.20-S.21；FT 4 - Bohren - Skript.pdf S.30；full.md Abschnitt \"3.4 Hauptzeit und Fertigungskosten / 4.4 Hauptzeitberechnung"]
+["Erklären Sie das Punch-Tap-Verfahren (Ablauf) und nennen Sie Vor-/Nachteile sowie geeignete Werkstoffe.", "Frage (DE)：Erklären Sie das Punch-Tap-Verfahren (Ablauf) und nennen Sie Vor-/Nachteile sowie geeignete Werkstoffe.\nAntwort (DE)：- Bezeichnung: Punch-Tap-Verfahren / Helikal-Gewindeformen.\n- Ablauf 1: Werkzeug hat unten zwei Schneiden; beim Punch/Eintauchen mit leichter Drehung werden zwei spiralförmige Nuten in die Bohrung geräumt.\n- Ablauf 2: Gewindeschneiden tauchen durch diese Nuten ohne Schnittbewegung ein.\n- Ablauf 3: Werkzeug wird um 1/2 Umdrehung gedreht; dadurch wird das gesamte Gewinde fertig geschnitten/geformt.\n- Ablauf 4: Schneiden stehen wieder in den gegenüberliegenden Nuten; Werkzeug kann ohne Schnittbewegung herausgezogen werden.\n- Vorteile: sehr schnell, kurze Hauptzeit, kein vollständiges Ausdrehen wie beim klassischen Gewindebohren.\n- Nachteile: Gewinde besitzt zwei Nuten/Unterbrechungen; Tragfähigkeit in der Praxis nur wenig eingeschränkt, aber als Einschränkung nennen.\n- Werkstoffe: geeignet vor allem gut umformbare/duktile Werkstoffe; spröde oder sehr harte Werkstoffe ungünstig.\n中文题目：解释 Punch-Tap/螺旋螺纹成形工艺的流程，并列出优缺点和适用材料。\n中文答案：- 名称：Punch-Tap 或 Helikal-Gewindeformen。\n- 步骤1：刀具底部有两条切削刃；冲入/进入孔时伴随轻微旋转，在孔壁形成两条螺旋槽。\n- 步骤2：螺纹切削刃通过这些槽进入孔内，不需要正常切削进入。\n- 步骤3：刀具转半圈，完成整个螺纹的切削/成形。\n- 步骤4：切削刃又回到相对的槽内，因此可无切削运动拔出。\n- 优点：速度非常快，主时间短，不像经典攻丝那样必须完整旋出。\n- 缺点：螺纹上有两条槽/中断；实际承载能力通常只小幅降低，但仍是限制。\n- 材料：适合塑性/延展性好的材料；脆性或很硬的材料不适合。\n出处：Garber_2025_10_30.txt（老师讲 Punch-Tap 流程、速度和材料限制）；FT 4 - Bohren - Skript.pdf S.31；full.md Abschnitt \"4.5 Neues Verfahren: Punch Tap"]
   </script>
 
   <script>
@@ -907,7 +921,7 @@
           const pair = parsePair(line, index);
           const sections = splitSections(pair[1] || "");
           const extras = Object.entries(sections)
-            .filter(([key]) => !["Frage (DE)", "Antwort (DE)", "????", "????", "??"].includes(key))
+            .filter(([key]) => !["Frage (DE)", "Antwort (DE)", "中文题目", "中文答案", "出处", "????", "??"].includes(key))
             .map(([key, value]) => ({ label: key, value }));
 
           const legacyNumber = legacyCardNumber(index);
@@ -918,9 +932,9 @@
             front: pretty(pair[0] || ""),
             questionDe: pretty(sections["Frage (DE)"] || pair[0] || ""),
             answerDe: pretty(sections["Antwort (DE)"] || ""),
-            questionZh: pretty(sections["????"] || ""),
-            answerZh: pretty(sections["????"] || ""),
-            source: pretty(sections["??"] || ""),
+            questionZh: pretty(sections["中文题目"] || sections["????"] || ""),
+            answerZh: pretty(sections["中文答案"] || sections["????"] || ""),
+            source: pretty(sections["出处"] || sections["??"] || ""),
             extras: extras.map(extra => ({ label: extra.label, value: pretty(extra.value) })),
             family: inferFamily(pair[0] || pair[1] || "")
           };
@@ -963,18 +977,38 @@
         const line = rawLine.trim();
         if (!line) return;
         const match = line.match(/^(.+?)\uFF1A(.*)$/u);
-        if (match) {
+        if (match && isSectionLabel(match[1].trim())) {
           current = match[1].trim();
           sections[current] = match[2].trim();
         } else if (current) {
-          sections[current] += ` ${line}`;
+          sections[current] += `\n${line}`;
         }
       });
       return sections;
     }
 
+    function isSectionLabel(label) {
+      return [
+        "Frage (DE)",
+        "Antwort (DE)",
+        "中文题目",
+        "中文答案",
+        "出处",
+        "Prüfungshinweis (txt)",
+        "Hinweis (DE)",
+        "Typische Beispiele (DE)",
+        "Zahlen (DE, aus Folie)"
+      ].includes(label);
+    }
+
     function inferFamily(text) {
-      if (/Scher|Span|Schneid|Werkzeug|Keil|Schnittgeschwindigkeit|Rauheit|Ra|Rz|Zerspan|Zustell|Verschleiß|Aufbau|Diffusion|Kolk|VB|SV|KT|KM|α|β|γ/i.test(text)) {
+      if (/Bohren|Bohr|Aufbohren|Vollbohren|Senken|Reiben|Spiralbohrer|Wendeplattenbohrer|Spitzenwinkel|Spannut|Querschneide|Punch|Tap|Werkzeugaufnahme|Schrumpffutter|Dehnspann|Spannschraube|Zahnvorschub/i.test(text)) {
+        return "FT4";
+      }
+      if (/Dreh|Rohling|Längs|Plandrehen|Rillentiefe|Schneidenradius|Hauptzeit|Kienzle|Schnittkraft|Drehmoment|Zustell|Vorschublänge|Eilgang/i.test(text)) {
+        return "FT3";
+      }
+      if (/Scher|Span|Schneid|Werkzeug|Keil|Schnittgeschwindigkeit|Rauheit|Ra|Rz|Zerspan|Verschleiß|Aufbau|Diffusion|Kolk|VB|SV|KT|KM|α|β|γ/i.test(text)) {
         return "FT2";
       }
       return "FT1";
@@ -983,7 +1017,8 @@
     function pretty(text) {
       return String(text)
         .replace(/\\\((.*?)\\\)/g, "$1")
-        .replace(/\s+/g, " ")
+        .replace(/[^\S\r\n]+/g, " ")
+        .replace(/[ \t]*\n[ \t]*/g, "\n")
         .trim();
     }
 
@@ -1165,15 +1200,29 @@
     function normalizeFormulaText(value) {
       return String(value || "")
         .replace(/\\\((.*?)\\\)/g, "$1")
+        .replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, "($1)/($2)")
+        .replace(/\\sqrt\{([^{}]+)\}/g, "√($1)")
         .replace(/\\text\{([^}]*)\}/g, "$1")
         .replace(/\\kappa/g, "κ")
         .replace(/\\gamma/g, "γ")
         .replace(/\\alpha/g, "α")
         .replace(/\\beta/g, "β")
+        .replace(/\\Delta/g, "Δ")
+        .replace(/\\omega/g, "ω")
+        .replace(/\\pi/g, "π")
         .replace(/\\mu/g, "µ")
+        .replace(/\\cdot/g, "·")
+        .replace(/\\times/g, "×")
+        .replace(/\\to/g, "→")
+        .replace(/\\Rightarrow/g, "⇒")
+        .replace(/\\approx/g, "≈")
+        .replace(/\\leq?/g, "≤")
+        .replace(/\\geq?/g, "≥")
+        .replace(/\\sin/g, "sin")
         .replace(/\^\s*\\circ/g, "°")
         .replace(/\\,/g, " ")
-        .replace(/\s+/g, " ")
+        .replace(/[^\S\r\n]+/g, " ")
+        .replace(/[ \t]*\n[ \t]*/g, "\n")
         .trim();
     }
 
@@ -1197,12 +1246,18 @@
       output = output.replace(/\b([A-Za-zα-ωΑ-Ω])_([A-Za-z0-9α-ωΑ-Ω,.\-−]{1,12})\b/g, (_, base, sub) => mathVar(base, sub));
       output = output.replace(/\b(F|P)_?([cfpa])\b/g, (_, base, sub) => mathVar(base, sub));
       output = output.replace(/\bv_?c\b/g, () => mathVar("v", "c"));
+      output = output.replace(/\bv_?f\b/g, () => mathVar("v", "f"));
       output = output.replace(/\bk_?c\b/g, () => mathVar("k", "c"));
       output = output.replace(/\bK_?(ver|sch|gamma|γ|v)\b/g, (_, sub) => mathVar("K", sub === "gamma" ? "γ" : sub));
       output = output.replace(/\bh_?0\b/g, () => mathVar("h", "0"));
       output = output.replace(/\ba_?p\b/g, () => mathVar("a", "p"));
       output = output.replace(/\bm_?c\b/g, () => mathVar("m", "c"));
       output = output.replace(/\bt_?h\b/g, () => mathVar("t", "h"));
+      output = output.replace(/\bT_?H\b/g, () => mathVar("T", "H"));
+      output = output.replace(/\bf_?z\b/g, () => mathVar("f", "z"));
+      output = output.replace(/\bR_?(a|z|t)\b/g, (_, sub) => mathVar("R", sub));
+      output = output.replace(/\bL_?(ges|Abschnitt)\b/g, (_, sub) => mathVar("L", sub));
+      output = output.replace(/\bl_?([au])\b/g, (_, sub) => mathVar("l", sub));
       output = output.replace(/√\(([^()<>]{1,80})\)/g, (_, radicand) => `<span class="math-sqrt">√(${radicand})</span>`);
 
       return output;
