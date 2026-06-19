@@ -1269,9 +1269,9 @@
 
     function renderList() {
       const activeCard = currentCard();
-      const baseOrder = state.mode === "sequence" ? state.cards.map((_, index) => index) : state.order;
+      const baseOrder = state.order;
       const items = baseOrder
-        .map(absoluteIndex => ({ card: state.cards[absoluteIndex], absoluteIndex }))
+        .map((absoluteIndex, queueIndex) => ({ card: state.cards[absoluteIndex], absoluteIndex, queueIndex }))
         .filter(({ card }) => Boolean(card))
         .filter(({ card }) => {
           if (!state.query) return true;
@@ -1283,13 +1283,12 @@
 
       el.visibleCount.textContent = `${items.length} / ${baseOrder.length}`;
       el.cardList.innerHTML = "";
-      items.forEach(({ card, absoluteIndex }) => {
+      items.forEach(({ card, queueIndex }) => {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = `list-item ${activeCard && card.id === activeCard.id ? "active" : ""}`;
+        button.className = `list-item ${queueIndex === state.index ? "active" : ""}`;
         button.addEventListener("click", () => {
-          const orderIndex = state.order.indexOf(absoluteIndex);
-          state.index = orderIndex >= 0 ? orderIndex : 0;
+          state.index = queueIndex >= 0 ? queueIndex : 0;
           state.flipped = false;
           state.pendingChoice = null;
           render();
@@ -1302,7 +1301,7 @@
         const meta = document.createElement("div");
         meta.className = "list-meta";
         const left = document.createElement("span");
-        left.textContent = `${card.number}. ${card.family}`;
+        left.textContent = `队列 ${queueIndex + 1} · ${card.family}`;
         const right = document.createElement("span");
         const record = state.progress[card.id] || {};
         right.textContent = `${statusText(record.rating)}${record.wrongCount ? ` · 错${record.wrongCount}` : ""}`;
@@ -1362,19 +1361,23 @@
 
     function advanceAfterAnswer() {
       const choice = state.pendingChoice;
+      const currentAbsoluteIndex = state.order[state.index];
       state.pendingChoice = null;
 
       if (choice === "unsure") {
-        requeueCurrentRandomly();
-        return;
+        scheduleRepeatLater(currentAbsoluteIndex);
       }
 
       if (state.mode === "wrong" && choice === "known") {
-        state.order = buildOrder("wrong");
+        removeCurrentAndFutureRepeats(currentAbsoluteIndex);
         if (state.index >= state.order.length) state.index = 0;
         state.flipped = false;
         render();
         return;
+      }
+
+      if (choice === "known") {
+        removeFutureRepeats(currentAbsoluteIndex);
       }
 
       const finishedRound = state.index >= state.order.length - 1;
@@ -1404,19 +1407,28 @@
       render();
     }
 
-    function requeueCurrentRandomly() {
-      if (state.order.length <= 1) {
-        state.flipped = false;
-        render();
-        return;
-      }
-      const [current] = state.order.splice(state.index, 1);
-      const minInsert = Math.min(state.index + 1, state.order.length);
+    function scheduleRepeatLater(absoluteIndex) {
+      if (typeof absoluteIndex !== "number") return;
+      removeFutureRepeats(absoluteIndex);
+      const minInsert = Math.min(state.index + 2, state.order.length);
       const insertAt = minInsert + Math.floor(Math.random() * (state.order.length - minInsert + 1));
-      state.order.splice(insertAt, 0, current);
-      if (state.index >= state.order.length) state.index = 0;
-      state.flipped = false;
-      render();
+      state.order.splice(insertAt, 0, absoluteIndex);
+    }
+
+    function removeFutureRepeats(absoluteIndex) {
+      for (let i = state.order.length - 1; i > state.index; i--) {
+        if (state.order[i] === absoluteIndex) {
+          state.order.splice(i, 1);
+        }
+      }
+    }
+
+    function removeCurrentAndFutureRepeats(absoluteIndex) {
+      for (let i = state.order.length - 1; i >= state.index; i--) {
+        if (state.order[i] === absoluteIndex) {
+          state.order.splice(i, 1);
+        }
+      }
     }
 
     function setMode(mode) {
