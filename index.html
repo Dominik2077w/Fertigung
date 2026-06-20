@@ -1077,13 +1077,40 @@
         button.addEventListener("click", () => answerCard(button.dataset.choice));
       });
       window.addEventListener("keydown", event => {
-        if (event.target.matches("input")) return;
+        if (event.target.matches("input, textarea, select, [contenteditable='true']")) return;
+        if (event.target.closest("button") && (event.key === " " || event.key === "Enter")) return;
         if (event.key === "ArrowRight") {
-          move(1);
+          event.preventDefault();
+          goForwardByKeyboard();
         } else if (event.key === "ArrowLeft") {
+          event.preventDefault();
           move(-1);
+        } else if (event.key === " " || event.key === "Enter") {
+          event.preventDefault();
+          goForwardByKeyboard();
+        } else if (event.key === "1") {
+          event.preventDefault();
+          answerByKeyboard("unknown");
+        } else if (event.key === "2") {
+          event.preventDefault();
+          answerByKeyboard("unsure");
+        } else if (event.key === "3") {
+          event.preventDefault();
+          answerByKeyboard("known");
         }
       });
+    }
+
+    function goForwardByKeyboard() {
+      if (!currentCard()) return;
+      if (state.flipped) {
+        advanceAfterAnswer();
+      }
+    }
+
+    function answerByKeyboard(choice) {
+      if (!currentCard() || state.flipped) return;
+      answerCard(choice);
     }
 
     function buildOrder(mode) {
