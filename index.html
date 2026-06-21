@@ -1327,7 +1327,7 @@
       const repeatSuffix = repeatLabel(state.index, currentAbsoluteIndex);
       const record = state.progress[card.id] || {};
       el.deckCount.textContent = state.cards.length;
-      el.counter.textContent = `进度 ${state.index + 1} / ${state.order.length} · ${originalLabel}${repeatSuffix}`;
+      el.counter.textContent = `${originalLabel}${repeatSuffix}`;
       el.progressBar.style.width = `${((state.index + 1) / state.order.length) * 100}%`;
       el.frontTag.textContent = `${modeTag(card)} · Frage`;
       el.backTag.textContent = `${modeTag(card)} · Antwort`;
@@ -1544,7 +1544,7 @@
         const meta = document.createElement("div");
         meta.className = "list-meta";
         const left = document.createElement("span");
-        left.textContent = `${originalCardLabel(card)} · 队列 ${queueIndex + 1} · ${card.family}${repeatLabel(queueIndex, absoluteIndex)}`;
+        left.textContent = `${originalCardLabel(card)} · ${card.family}${repeatLabel(queueIndex, absoluteIndex)}`;
         const right = document.createElement("span");
         const record = state.progress[card.id] || {};
         right.textContent = `${statusText(record.rating)}${record.wrongCount ? ` · 错${record.wrongCount}` : ""}`;
