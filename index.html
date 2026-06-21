@@ -271,7 +271,8 @@
     .status {
       color: var(--muted);
       font-size: 13px;
-      white-space: nowrap;
+      line-height: 1.35;
+      text-align: right;
     }
 
     .card-body {
@@ -1009,7 +1010,8 @@
 
           return {
             id: `card-${legacyNumber}`,
-            number: index + 1,
+            number: legacyNumber,
+            deckIndex: index + 1,
             front: pretty(pair[0] || ""),
             questionDe: pretty(sections["Frage (DE)"] || pair[0] || ""),
             answerDe: pretty(sections["Antwort (DE)"] || ""),
@@ -1229,20 +1231,36 @@
       return state.cards[state.order[state.index]];
     }
 
+    function originalCardLabel(card) {
+      return `原题 ${card.number || card.deckIndex || ""}`.trim();
+    }
+
+    function isRepeatOccurrence(queueIndex, absoluteIndex) {
+      if (typeof queueIndex !== "number" || typeof absoluteIndex !== "number") return false;
+      return state.order.findIndex(item => item === absoluteIndex) !== queueIndex;
+    }
+
+    function repeatLabel(queueIndex, absoluteIndex) {
+      return isRepeatOccurrence(queueIndex, absoluteIndex) ? " · 复现" : "";
+    }
+
     function render() {
       const card = currentCard();
       if (!card) {
         renderEmptyState();
         return;
       }
+      const currentAbsoluteIndex = state.order[state.index];
+      const originalLabel = originalCardLabel(card);
+      const repeatSuffix = repeatLabel(state.index, currentAbsoluteIndex);
       const record = state.progress[card.id] || {};
       el.deckCount.textContent = state.cards.length;
-      el.counter.textContent = `${state.index + 1} / ${state.order.length}`;
+      el.counter.textContent = `进度 ${state.index + 1} / ${state.order.length} · ${originalLabel}${repeatSuffix}`;
       el.progressBar.style.width = `${((state.index + 1) / state.order.length) * 100}%`;
       el.frontTag.textContent = `${modeTag(card)} · Frage`;
       el.backTag.textContent = `${modeTag(card)} · Antwort`;
-      el.frontStatus.textContent = statusText(record.rating);
-      el.backStatus.textContent = statusText(record.rating);
+      el.frontStatus.textContent = `${statusText(record.rating)} · ${originalLabel}${repeatSuffix}`;
+      el.backStatus.textContent = `${statusText(record.rating)} · ${originalLabel}${repeatSuffix}`;
       el.answerNextBtn.disabled = false;
       el.prevBtn.disabled = state.order.length <= 1;
       el.nextBtn.disabled = state.order.length <= 1;
@@ -1436,7 +1454,7 @@
 
       el.visibleCount.textContent = `${items.length} / ${baseOrder.length}`;
       el.cardList.innerHTML = "";
-      items.forEach(({ card, queueIndex }) => {
+      items.forEach(({ card, absoluteIndex, queueIndex }) => {
         const button = document.createElement("button");
         button.type = "button";
         button.className = `list-item ${queueIndex === state.index ? "active" : ""}`;
@@ -1454,7 +1472,7 @@
         const meta = document.createElement("div");
         meta.className = "list-meta";
         const left = document.createElement("span");
-        left.textContent = `队列 ${queueIndex + 1} · ${card.family}`;
+        left.textContent = `${originalCardLabel(card)} · 队列 ${queueIndex + 1} · ${card.family}${repeatLabel(queueIndex, absoluteIndex)}`;
         const right = document.createElement("span");
         const record = state.progress[card.id] || {};
         right.textContent = `${statusText(record.rating)}${record.wrongCount ? ` · 错${record.wrongCount}` : ""}`;
