@@ -1304,7 +1304,7 @@
     }
 
     function originalCardLabel(card) {
-      return `原题 ${card.number || card.deckIndex || ""}`.trim();
+      return `原题 ${card.deckIndex || card.number || ""}`.trim();
     }
 
     function isRepeatOccurrence(queueIndex, absoluteIndex) {
