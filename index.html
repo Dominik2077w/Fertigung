@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Garber1</title>
+  <title>FV</title>
   <style>
     :root {
       color-scheme: light;
@@ -551,6 +551,72 @@
       font-size: 12px;
     }
 
+    .deck-chooser {
+      width: min(900px, calc(100% - 32px));
+      margin: 34px auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    .deck-chooser h2 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .deck-chooser p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .deck-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .deck-choice {
+      display: grid;
+      gap: 10px;
+      text-align: left;
+      min-height: 156px;
+      padding: 18px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      align-content: start;
+    }
+
+    .deck-choice strong {
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .deck-choice span {
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .app:not(.deck-selected) #studyLayout {
+      display: none;
+    }
+
+    .app.deck-selected #deckChooser {
+      display: none;
+    }
+
+    #deckSwitchBtn[hidden] {
+      display: none;
+    }
+
+    @media (max-width: 620px) {
+      .deck-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .hidden {
       display: none !important;
     }
@@ -687,11 +753,12 @@
             </svg>
           </div>
           <div>
-            <h1>Garber1</h1>
-            <p class="subtitle"><span id="deckCount">0</span> 张 Fertigungstechnik 复习卡</p>
+            <h1>FV</h1>
+            <p class="subtitle"><span id="deckName">选择卡组</span> · <span id="deckCount">0</span> 张复习卡</p>
           </div>
         </div>
         <div class="toolbar">
+          <button id="deckSwitchBtn" type="button" hidden>切换卡组</button>
           <div class="segmented" aria-label="语言">
             <button data-lang="de">DE</button>
             <button data-lang="zh">中文</button>
@@ -703,7 +770,26 @@
       </div>
     </header>
 
-    <main class="layout">
+    <section id="deckChooser" class="deck-chooser" aria-label="选择卡组">
+      <div>
+        <h2>选择卡组</h2>
+        <p>先选择 Garber 或 Hoffmann，然后进入对应练习。顺序、乱序、20题测验和错题库都会只作用于当前卡组。</p>
+      </div>
+      <div class="deck-grid">
+        <button class="deck-choice" data-deck-choice="garber" type="button">
+          <strong>Garber</strong>
+          <span data-deck-count="garber">0 张</span>
+          <span>我们之前整理的 Garber1 题库。</span>
+        </button>
+        <button class="deck-choice" data-deck-choice="hoffmann" type="button">
+          <strong>Hoffmann</strong>
+          <span data-deck-count="hoffmann">0 张</span>
+          <span>来自新 PDF 的 Hoffmann 原样题库。</span>
+        </button>
+      </div>
+    </section>
+
+    <main id="studyLayout" class="layout">
       <section class="study" aria-live="polite">
         <div class="progress-row">
           <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
@@ -1019,9 +1105,55 @@
 ["Welche Nachteile hat Läppen?","Frage (DE)：Welche Nachteile hat Läppen?\nAntwort (DE)：Teuer, langsam, geringer Abtrag; hoher Kornverbrauch; starke Verschmutzung; Läppschlamm als Sondermüll.\n中文题目：Läppen 有哪些缺点？\n中文答案：昂贵、慢、去除量小；磨粒消耗大；污染严重；研磨泥需作为特殊废弃物处理。\n出处：用户新增：Läppen 卡组"]
 </script>
 
+  <script id="hoffmannData" type="text/plain">
+["A01 / Gießen/Erstarren: 4 Diagramme zum Erstarren","Frage (DE)：Skizzieren Sie die 4 Diagramme zum Erstarren metallischer Schmelzen (t-T und T-v jeweils für reines Metall\nund Legierung) und erläutern Sie die Schwindungsanteile.\nAntwort (DE)：Welche 4 Diagramme?\n- t-T: Abkühlkurve reines Metall\n- t-T: Abkühlkurve Legierung\n- T-v: Volumenschwindung / spezifisches Volumen v bei reinem Metall\n- T-v: Volumenschwindung / spezifisches Volumen v bei Legierungen\nKernaussagen:\n- Beim Abkühlen kommt es zu Volumenkontraktion.\n- Schwindungsanteile: Flüssigkontraktion, Erstarrungskontraktion, Festkörperkontraktion.\n- Lunkerung entsteht aus der Summe dieser Kontraktionen, wenn Volumendefizit nicht kompensiert wird.\n中文题目：画出金属熔体凝固的4张经典图（纯金属/合金各一张 t-T 冷却曲线 + T-v 比体积收缩曲线），并说明收缩/缩孔来源。\n中文答案：4张图：纯金属 t-T、合金 t-T、纯金属 T-v、合金 T-v。\n收缩来源：液态收缩、凝固收缩、固态收缩。总缩孔倾向 = 三者之和；若没有冒口/补缩补偿，就会形成缩孔/空洞。\n出处：Zusammenfassung_Hoffmann.pdf, S.2-3, Kap. 1.3 Erstarrung metallischer Schmelzen; t-T/T-v Schaubilder und\nVolumenschwindung."]
+["A02 / Kunststoffe: PVT/VT amorph vs. teilkristallin","Frage (DE)：Skizzieren und erklären Sie ein v-T bzw. p-v-T-Diagramm beim Abkühlen aus der Schmelze für amorphe und\nteilkristalline Thermoplaste. Markieren Sie Tg bzw. TK/Tm und begründen Sie den Unterschied in der\nVolumenschwindung ΔV.\nAntwort (DE)：- Amorph: Beim Abkühlen sinkt das spezifische Volumen v kontinuierlich; wichtiger Übergang ist Tg\n(Glasübergang). Insgesamt geringere Volumenschwindung ΔV.\n- Teilkristallin: Zusätzlich zur Abkühlkontraktion kommt Kristallisation hinzu. Geordnete/dichtere\nBereiche führen zu deutlich höherer ΔV; höhere Kristallinität bedeutet höhere Schwindung.\n- Voraussetzung der Kristallisation: Unterkühlung der Schmelze.\n- p-v-T-Bezug: Das p-v-T-Verhalten bei Abkühlung ist wichtig, weil es Schwindung, Maßhaltigkeit und Verzug\nbeeinflusst.\n中文题目：画并解释热塑性塑料从熔体冷却时的 v-T（或 p-v-T）图：无定形与半结晶材料，标出 Tg 与 TK/Tm，并说明体积收缩\nΔV 差异。\n中文答案：无定形：v 随温度下降较连续地降低，关键是玻璃化温度 Tg，总体 ΔV 较小。\n半结晶：冷却过程中发生结晶，结构更致密，体积收缩明显更大；结晶度越高，收缩越大。结晶需要过冷。p-v-T 行为用\n于解释尺寸变化、翘曲和收缩补偿。\n出处：Zusammenfassung_Hoffmann.pdf, S.17-19, Kap. 3.1-3.2 Strukturbildung/Erstarrung von Thermoplasten; 2.3\nUrformverfahren für Kunststoffe (Teil 1), Folien 7-8, 38-40; Teil 2, Folie 88."]
+["A03 / Kunststoffe: Schwindung ΔV und Folgen","Frage (DE)：Erklären Sie anhand des p-v-T-Verhaltens die Volumenschwindung ΔV beim Abkühlen eines amorphen vs.\nteilkristallinen Thermoplasten. Warum ist ΔV bei teilkristallinen größer und welche Folgen ergeben sich\n(Anisotropie, Eigenspannungen, Verzug)?\nAntwort (DE)：- Teilkristalline Thermoplaste: höhere Kristallinität -> größere Volumenschwindung ΔV.\n- Amorphe Thermoplaste: geringe Kristallinität -> geringere ΔV.\n- Kristallisation benötigt Unterkühlung.\n- Schnelles Abkühlen friert Molekülorientierungen ein -> Anisotropie.\n- Niedrigere Kristallinität/Dichte und erhöhte Sekundärkristallisation können Nachschwindung und Verzug\nbegünstigen.\n- Unterschiedliche Kristallinität/Orientierung über die Wand -> Eigenspannungen und Bauteilverzug.\n中文题目：解释无定形和半结晶热塑性塑料冷却时的 ΔV 差异，以及快速冷却对各向异性、残余应力和翘曲的影响。\n中文答案：半结晶材料因结晶形成更致密结构，所以 ΔV 更大；无定形材料结晶度低，ΔV 更小。结晶要过冷。快速冷却会冻结分子\n取向，导致各向异性；后续二次结晶与厚度方向性质差异会造成继续收缩、内应力和翘曲。\n出处：Zusammenfassung_Hoffmann.pdf, S.18, Abschnitt Erstarrung von Thermoplasten; S.20, Abschnitt\nOrientierung/Anisotropie/Eigenspannungen."]
+["A04 / Fließ-/Viskositätskurven: newtonsch, dilatant, strukturviskos","Frage (DE)：Zeichnen und erläutern Sie Fließ-/Viskositätskurven für newtonsch, dilatant und strukturviskos. Erklären\nSie, welches Fließverhalten Kunststoffschmelzen typischerweise zeigen und was das für\nDruckbedarf/Durchsatz bedeutet.\nAntwort (DE)：- Rheologie beschreibt, erklärt und misst Fließeigenschaften. Viskosität η ist der innere Widerstand\ngegen Fließen.\n- Newtonsch: η konstant; Scherspannung τ proportional zur Schergeschwindigkeit gamma_dot.\n- Strukturviskos / shear-thinning: η sinkt bei steigender Schergeschwindigkeit.\n- Dilatant / shear-thickening: η steigt bei steigender Schergeschwindigkeit.\n- Kunststoffschmelzen sind typischerweise strukturviskos: Durchsatzsteigerung benötigt unterproportional\nmehr Druck.\n- Einflussgrößen: Temperatur, Druck, Füllstoffe, Molmasse/Kettenlänge, Weichmacher und\nSchergeschwindigkeitsbereich.\n中文题目：画并解释牛顿型、剪切增稠、剪切变稀的流动/黏度曲线；说明塑料熔体通常表现为什么行为以及对压力/通过量的意义。\n中文答案：牛顿型 η 恒定；剪切变稀时剪切速率越高 η 越低；剪切增稠相反。塑料熔体通常为剪切变稀，因此提高 Durchsatz 时\n压力需求不是线性等比例上升。影响因素包括温度、压力、填料、分子量/链长和增塑剂。\n出处：Zusammenfassung_Hoffmann.pdf, S.21-22, Kap. 3.3 Fließverhalten; 2.3 Urformverfahren für Kunststoffe (Teil 1),\nFolien 21-24."]
+["A05 / Viskosität - Fließ-/Formfüllungsvermögen - Durchsatz","Frage (DE)：Erklären Sie Fließ- und Formfüllungsvermögen (Einflussgrößen) und den Zusammenhang zwischen Viskosität η\nund Durchsatz.\nAntwort (DE)：- Fließvermögen: Lauflänge der Schmelze in einem definiert geformten Kanal, z. B. Spiralprobe nach Sipp.\n- Formfüllungsvermögen: Bewertung des Formfüllungsgrades eines definierten Querschnitts.\n- Einflussgrößen bei Metall: η/Zähigkeit, Gießtemperatur, Wärmeinhalt/Kristallisationswärme,\nZusammensetzung, Strömungsverhältnisse/Druckhöhe, Erstarrungsintervall, Wärmeleitfähigkeit/Temperatur der\nForm, Benetzbarkeit/Schlichte.\n- Kunststoffschmelze: η↓ -> Fließfähigkeit↑ -> Durchsatz↑ bzw. geringerer Druckbedarf für gleichen\nDurchsatz.\n- Kettenlänge/Molmasse↑ -> η↑ -> Durchsatz↓. Thermoplaste sind meist strukturviskos.\n中文题目：解释金属/塑料加工中的流动能力、充型能力、影响因素，以及黏度与产量/通过量的关系。\n中文答案：流动能力是熔体在标准通道中的流动长度；充型能力是细节/截面被填满的程度。影响因素包括黏度、浇注温度、热含量、\n成分、压力/流动条件、凝固区间、模温/导热、润湿性等。塑料中黏度越低越易流动，通过量越高；分子量越高黏度越大\n，产量越低。\n出处：2.1 Gießen (Grundlagen).txt, Folien 26-27; Zusammenfassung_Hoffmann.pdf, S.1 und S.23; 2.3 Urformverfahren für\nKunststoffe (Teil 1), Folien 19-21."]
+["A06 / Exogene vs. endogene Erstarrung","Frage (DE)：Was ist exogene bzw. endogene Erstarrung? Nennen Sie wichtigste Merkmale und Folgen für Nachfließen/Lunker.\nAntwort (DE)：- Endogen (ungerichtet): Kristallformen Globulite/Sphärolithe; eher glatte/ebene Erstarrungsfront; günstig\nfür Nachfließen der Schmelze und wirkt Lunkerbildung entgegen.\n- Exogen (gerichtet): Stängelkristalle/Dendriten; raue/unebene Erstarrungsfront; Nachfließen der\nRestschmelze wird behindert, Lunkerbildung wird begünstigt.\n- Im Gussteil können Mischtypen auftreten, z. B. endogen - exogen - endogen über den Querschnitt.\n中文题目：什么是外生/内生凝固？列出特征，并说明对补缩/缩孔的影响。\n中文答案：内生凝固：非定向，常见球状晶，凝固前沿更平滑，有利于金属液继续补流，减少缩孔。外生凝固：定向，常见柱状晶/树\n枝晶，前沿粗糙不平，剩余熔体补流受阻，更容易形成缩孔。截面上可出现混合凝固类型。\n出处：2.1 Gießen (Grundlagen).txt, Folien 53-55, Abschnitt Erstarrungstypen."]
+["A07 / Verfahren: Prozessablauf als allgemeine Schritte","Frage (DE)：Beschreiben Sie den Prozessablauf eines genannten Verfahrens (Prozessschritte). Ordnen Sie das Verfahren\nnach Form und Modell ein.\nAntwort (DE)：Antwortstruktur:\n1. Einteilung: Form (verlorene Form oder Dauerform) und Modell (Dauermodell oder verlorenes Modell).\n2. Form-/Kernvorbereitung: Form herstellen, Kerne herstellen/einlegen.\n3. Form schließen/aufbauen: Einguss, Speiser, Filter falls vorhanden.\n4. Füllen: Gießen/Schießen/Druck, ggf. Entlüften/Vakuum.\n5. Erstarren: Speisen oder Nachdruck.\n6. Entformen: Form öffnen/zerstören, Bauteil entnehmen.\n7. Nacharbeit: Anguss/Speiser abtrennen, Entkernen, Reinigen/Putzen, ggf. Bearbeitung.\nVerfahren üben: Sandguss, Feinguss, Lost Foam, Vollformgießen, Kokillenguss, Niederdruckkokillenguss,\nDruckguss, Schleuderguss, Spritzgießen-Zyklus.\n中文题目：给定一种工艺，按步骤写流程，并按模具/模型分类。\n中文答案：通用步骤：先分类（一次性/永久模具；永久/消失模型），再写制模制芯、合箱/装配、充型、凝固/补缩、脱模、后处理。\n要能套用到砂型、精密铸造、消失模、金属型、低压金属型、压铸、离心铸造和注塑循环。\n出处：Schwerpunkte der Prüfung FERT.pdf, S.1; Zusammenfassung_Hoffmann.pdf, Kap. 2.4 Verfahrensbeschreibung/Prozessablauf\nund Kap. 3.5 Spritzgießen."]
+["A08 / Verfahren: Einteilung nach Form und Modell","Frage (DE)：Wie werden Gießverfahren nach Form und Modell eingeteilt? Nennen Sie die Klassen und ordnen Sie wichtige\nVerfahren zu.\nAntwort (DE)：- Form: verlorene Form (wird zerstört) vs. Dauerform/Kokille (wiederverwendbar).\n- Modell: Dauermodell (wird entnommen und wiederverwendet) vs. verlorenes Modell (wird\nausgeschmolzen/vergast).\nZuordnung:\n- Sandguss: verlorene Form + Dauermodell.\n- Feinguss: verlorene Form + verlorenes Modell (Wachs).\n- Lost Foam / Vollform: verlorene Form + verlorenes Modell (EPS/Schaum).\n- Kokillenguss, Niederdruckkokillenguss, Druckguss, Schleuderguss: Dauerform, i.d.R. kein separates Modell.\n中文题目：铸造工艺如何按模具与模型分类？写出分类原则并归类主要工艺。\n中文答案：模具：一次性模具 vs 永久模具（金属型）。模型：永久模型 vs 消失模型。砂型铸造是一次性模具+永久模型；精密铸造\n是一次性模具+蜡模型；Lost Foam/全模是一次性模具+泡沫消失模型；金属型、低压金属型、压铸、离心铸造属于永久模\n具。\n出处：Schwerpunkte der Prüfung FERT.pdf, S.1; Zusammenfassung_Hoffmann.pdf, Kap. 2.4 Verfahrensbeschreibung/Prozessablauf."]
+["A09 / Keimbildung homogen/heterogen und Gefüge","Frage (DE)：Erklären Sie homogene und heterogene Keimbildung und den Einfluss auf das Gefüge. Welche Diagramme gehören\ndazu (Funktion von ΔT/Unterkühlung)?\nAntwort (DE)：Grundkette: Unterkühlung ΔT -> Keimbildung -> Kristallwachstum -> Primärgefüge/Korngröße.\n- Homogene Keimbildung: Schmelze bildet arteigene Keime; Unterkühlung erforderlich; ΔT beeinflusst\nKeimzahl NKZ und Kristallisationsgeschwindigkeit vKG. NKZ groß -> feines Primärkorn.\n- Heterogene Keimbildung: Keime an Oberflächen oder durch Impfmittel/Fremdkeime; geringere\nAktivierungsenergie, mehr Keime, feineres Gefüge.\nDiagramme: NKZ = f(ΔT) und vKG = f(ΔT).\n中文题目：解释均匀/异质形核及其对组织的影响，并说明对应的过冷度图。\n中文答案：核心链：过冷 -> 形核 -> 晶体长大 -> 初生组织。均匀形核由熔体自身形成晶核，需要过冷。异质形核依靠模壁/夹杂/\n接种剂，活化能更低，晶核更多，组织更细。要会 NKZ-ΔT 和 vKG-ΔT 两张图。\n出处：Zusammenfassung_Hoffmann.pdf, S.4; 2.1 Gießen (Grundlagen).txt, Folien 43-51."]
+["A10 / Kristallisationszonen / Stängelkristalle vs. globular","Frage (DE)：Beschreiben Sie Kristallisationszonen im Gussteil und vergleichen Sie Stängelkristalle mit globularen\nKristallen.\nAntwort (DE)：Kristallisationszonen:\n- Randzone an Formwand: starke Unterkühlung -> feines Korn.\n- Übergangszone: säulenförmige Stängelkristalle/Dendriten bei gerichteter Wärmeabfuhr.\n- Kernzone: Keimanreicherung, eher endogene/globulare Kristallisation.\nStängelkristalle: entstehen bei gerichteter Wärmeabführung, anisotrop, ungünstige Querfestigkeit,\nmöglichst vermeiden.\nGlobulare Kristalle: wachsen eher gleichmäßig in alle Richtungen, günstiger für Festigkeit/Zähigkeit und\nhomogenere Eigenschaften.\n中文题目：描述铸件截面凝固分区，并比较柱状晶/树枝晶与球状等轴晶。\n中文答案：表层靠模壁强过冷、晶粒细；过渡区因定向散热形成柱状晶/树枝晶；中心区晶核富集，趋向等轴/球状晶。柱状晶方向性\n强、各向异性，横向性能差；球状/等轴晶更均匀，强韧性更好。\n出处：Zusammenfassung_Hoffmann.pdf, S.5; 2.1 Gießen (Grundlagen).txt, Folien 53-55."]
+["A11 / Speiser & Lunker + Heuver’sche Kreismethode","Frage (DE)：Erklären Sie Lunker und Speiser und beschreiben Sie die Heuver’sche Kreismethode. Warum verschiebt man\ndas thermische Zentrum in den Speiser?\nAntwort (DE)：- Lunker: Hohlräume/Vertiefungen durch Schwindung beim Erstarren; entstehen im thermischen Zentrum, wo die\nletzte Schmelze erstarrt.\n- Speiser: Reservevolumen zum Nachspeisen der Erstarrungsschwindung; Ziel ist, das thermische Zentrum in\nden Speiser zu verschieben, damit der Lunker im Speiser liegt.\n- Heuver’sche Kreismethode: Querschnitt soll zum Speiser hin kontinuierlich größer werden. Von kleinster\nWanddicke aus werden berührende eingeschriebene Kreise Richtung Speiser konstruiert; Flächen/Querschnitte\nwachsen mit Heuversfaktor kH.\n- Speiser liegt am dicksten Querschnitt und muss zuletzt erstarren; Speiser kann isoliert oder exotherm\nbeheizt werden.\n中文题目：解释缩孔、冒口和 Heuver 圆法；为什么把热中心移到冒口里？\n中文答案：缩孔是凝固收缩导致的空洞，常在最后凝固的热中心。冒口是补缩储液体，目标是让缩孔发生在冒口而不是铸件中。\nHeuver圆法通过向冒口方向逐级增大截面/壁厚来引导定向凝固；冒口放在最大截面并最后凝固，可用保温或放热材料延迟\n凝固。\n出处：Zusammenfassung_Hoffmann.pdf, S.5-6; 2.1 Gießen (Grundlagen).txt, Folien 62-63."]
+["A12 / GJS vs. GJL","Frage (DE)：Worin unterscheiden sich Gusseisen mit Lamellengraphit (GJL) und Gusseisen mit Kugelgraphit (GJS)? Nennen\nSie Eigenschaften und Konstruktionshinweise.\nAntwort (DE)：- GJL: Graphit als Lamellen -> starke Kerbwirkung/Spannungsspitzen; geringe Zugfestigkeit und sehr geringe\nBruchdehnung, spröde. Besser auf Druck beanspruchen; Druckfestigkeit typ. 3-4 mal Zugfestigkeit. Vorteile:\ngute Gießeigenschaften, billig, gut zerspanbar, hohe Dämpfung.\n- GJS: Graphit als Kugeln/Sphärolithe -> geringere Kerbwirkung; bessere Zugfestigkeit, Zähigkeit und\ndynamische Eigenschaften. Herstellung durch Magnesiumzugabe. Nachteile ggü. GJL: geringere\nDämpfung/Wärmeleitfähigkeit, teurer.\n中文题目：球铁GJS和灰铁GJL的区别、性能和设计提示。\n中文答案：GJL为片状石墨，缺口效应强，抗拉和延伸率低，脆，设计上尽量承压；优点是便宜、铸造性好、易切削、阻尼高。GJS为\n球状石墨，通过镁球化，缺口效应小，抗拉、韧性和动态性能更好，但阻尼/导热较低、成本更高。\n出处：Zusammenfassung_Hoffmann.pdf, S.8-9; 2.1 Gießen (Grundlagen).txt, Folien 85-87."]
+["A13 / Extrusion: Dreizonenschnecke vs. Nutbuchsenextruder","Frage (DE)：Vergleichen Sie Dreizonenschnecke und Nutbuchsenextruder hinsichtlich Druckaufbau, Förderverhalten, Vor-\nund Nachteilen. Skizzieren Sie typische Druckverläufe.\nAntwort (DE)：Dreizonenschnecke:\n- Druckaufbau durch abnehmendes freies Volumen, Reibung und Schmelzbildung.\n- Schleppströmung fördert nach vorne; Druckströmung wirkt entgegen.\n- Durchsatz hängt stark vom Werkzeug-Gegendruck ab; bei Drehzahlsteigerung wächst Druckströmung,\nPumpwirkungsgrad sinkt.\nNutbuchsenextruder:\n- Ziel: hohe, möglichst gegendruckunabhängige Durchsätze.\n- Nut erhöht Druck; Druckmaximum schon in der Einzugszone.\n- Druckströmung und Schleppströmung gleichgerichtet; bei steigendem Druck steigt Durchsatz.\n- Vorteile: hoher/robuster Durchsatz. Nachteile: Nutkühlung/Wartung, schlechtere Homogenisierung,\nMischteile nötig.\n中文题目：比较三段螺杆与带槽套挤出机：压力建立、输送行为、优缺点，并能画图。\n中文答案：三段螺杆：拖曳流向前、压差流向后，受模头背压影响大；转速提高时回流增强，效率下降。带槽套：进料区槽使压力快\n速建立，拖曳流和压差流同向，产量对背压更不敏感；但槽要冷却、均化较差，需要混合/剪切元件。\n出处：Zusammenfassung_Hoffmann.pdf, S.23-25, Kap. 3.4 Extrusion; Zusammenfassung_Hoffmann.txt, Abschnitt 3.4."]
+["A14 / Typische Gießfehler","Frage (DE)：Nennen und erläutern Sie typische Gießfehler (Ursachen/Erkennung/Abhilfe).\nAntwort (DE)：Typische Gießfehler:\n- Lunker: Hohlräume/Vertiefungen durch Schwindung; Abhilfe: Speiser, Heuver, kontrollierte Erstarrung.\n- Warmrisse/Kaltrisse: Risse durch Erstarrungs-/Abkühlspannungen; Warmrisse zwischen Liquidus/Solidus,\nKaltrisse später.\n- Nichtausfüllen/Mißlauf: unvollständige Formfüllung durch unzureichendes Fließ-/Formfüllungsvermögen.\n- Kaltschweißung/Kaltverschweißung: zwei Schmelzströme treffen zu kalt zusammen.\n- Seigerungen: Entmischung/ungleiche Zusammensetzung.\n- Form-/Kernfehler: Kernversatz, Teilungsversatz, Sand-/Schlackeeinschlüsse, Schülpen/Rattenschwänze,\nAnbrennen.\n中文题目：列举并解释典型铸造缺陷及原因/对策。\n中文答案：典型缺陷：缩孔（凝固收缩）、热裂/冷裂（凝固/冷却应力）、充型不足、冷隔/冷焊、偏析、型芯或砂型相关缺陷（芯偏、\n分型错位、夹砂夹渣、鼠尾、粘砂等）。对策包括冒口/定向凝固、合理温度与浇注、改进型砂/排气/浇道。\n出处：Zusammenfassung_Hoffmann.pdf, S.7, Kap. 1.5 Typische Gießfehler; Zusammenfassung_Hoffmann.txt, Kap. 1.5; 2.1 Gießen\n(Grundlagen).txt, Folie 80 Fehlerzusammenstellung."]
+["A15 / Schwerkraftguss + Gießsystem + Speiser","Frage (DE)：Erklären Sie Schwerkraftguss sowie Aufbau und Funktion von Gießsystem und Speiser.\nAntwort (DE)：Schwerkraftguss:\n- Formfüllung unter Ausnutzung der Schwerkraft, fallend von oben oder steigend von unten.\nGießsystem Aufbau:\n- Gießtrichter/Eingusstümpel -> Einlauf -> Querlauf/Schlackenlauf -> Zulauf/Anschnitt -> Formhohlraum.\n- Querschnittsregel: A_Einlauf > A_Querlauf > A_Zulauf.\nFunktion/Anforderungen:\n- definierte Füllzeit, geringe Geschwindigkeit, turbulenzarm, ausreichender hydrostatischer Druck,\nAbscheidung von Verunreinigungen, keine Erosion, kein Luftansaugen.\nSpeiser:\n- Reservevolumen zum Nachspeisen der Erstarrungsschwindung; thermisches Zentrum soll in den Speiser\nwandern; Speiser muss zuletzt erstarren.\n中文题目：解释重力铸造、浇注系统结构/功能和冒口。\n中文答案：重力铸造依靠重力充型，可上浇或底注。浇注系统由浇口杯、直浇道、横浇道/渣道、内浇口进入型腔；截面通常直浇道>\n横浇道>内浇口。功能是平稳、低湍流、按时充型并分离夹杂。冒口是补缩储液体，让热中心转到冒口并最后凝固。\n出处：Zusammenfassung_Hoffmann.pdf, S.1-2, Kap. 1.2 Schwerkraftguss/Gießsystem; S.6 Speiser; 2.1 Gießen (Grundlagen).txt,\nFolien 30-32."]
+["A16 / Feingießen: Prozessschritte","Frage (DE)：Nennen Sie die Prozessschritte des Feingießens (stichpunktartig).\nAntwort (DE)：1. Wachsmodelle herstellen.\n2. Modelltraube montieren.\n3. Modelltraube in keramischen Schlicker tauchen.\n4. Feinkörniges feuerfestes Material in mehreren Schichten aufbringen.\n5. Modellwachs im Dampfautoklaven ausschmelzen.\n6. Keramikform brennen/sintern.\n7. Schmelze in vorgeheizte Form (ca. 900-1200 °C) gießen.\n8. Erstarren zum Gussteil.\n9. Form schnell zerstören/ausschlagen, um Schwindungsrisse zu vermeiden.\nZusätzlich möglich: von Gießtraube trennen, strahlen/nachbearbeiten.\n中文题目：按点列出精密铸造/熔模铸造的流程步骤。\n中文答案：制作蜡模；组装模型树；浸陶瓷浆；多层覆耐火材料成壳；蒸汽高压釜脱蜡；陶壳焙烧；向预热陶壳浇注；凝固；快速破\n壳取件以避免收缩裂纹；必要时切除浇注树并后处理。\n出处：Zusammenfassung_Hoffmann.pdf, Kap. 2.4.2 Feinguss; 2.1 Gießen (Verfahren).txt, Folie 85\nFeingießen-Verfahrensschritte."]
+["A17 / Sandguss - Handformen","Frage (DE)：Beschreiben Sie den Prozessablauf beim Sandguss - Handformen (manuell).\nAntwort (DE)：1. Modellunterteil in Formkasten einformen, Modellsand und Hinterfüllsand einfüllen, verdichten,\nabstreifen.\n2. Formkasten wenden, obere Modellhälfte auflegen, Oberkasten einformen, abstreifen.\n3. Formkasten öffnen.\n4. Modell entnehmen.\n5. Eingusstrichter formen und Kern fertigen.\n6. Kern einlegen und ausblasen.\n7. Gießen und erstarren lassen; Formkasten beschweren/verklemmen.\n8. Formkasten leeren, Kreislaufmaterial entfernen (Speiser, Einguss).\n中文题目：说明手工砂型铸造流程。\n中文答案：下模型造型、填砂压实刮平；翻箱并做上箱；开箱；起模；做浇口和砂芯；下芯并清理；浇注凝固；落砂并去除浇冒口等\n循环料。\n出处：Zusammenfassung_Hoffmann.pdf, S.12, Kap. 2.4.1 Sandguss: Handformen."]
+["A18 / Sandguss - Maschinenformen","Frage (DE)：Beschreiben Sie den Prozessablauf beim Sandguss - Maschinenformen (halbautomatisch).\nAntwort (DE)：1. Formkästen laufen im Kreis auf Transportsystem.\n2. Modellplatten werden von unten an Formkästen gefahren.\n3. Speiser/Filter einlegen.\n4. Füllrahmen aufsetzen, Formsand einfüllen.\n5. Verdichten, z. B. Luftimpulsverfahren.\n6. Überschüssigen Sand abstreifen.\n7. Modellplatte ausfahren.\n8. Formkästen wenden.\n9. Kern einlegen, Eingusstrichter bohren, ggf. Gießhilfen einlegen.\n10. Oberkasten wenden und aufsetzen.\n11. Abgießen.\n12. Erstarren, Entformen/Entleeren.\n13. Kühlen und fördern.\n14. Kreislaufmaterial abtrennen.\n中文题目：说明机器造型砂型线的流程。\n中文答案：砂箱循环输送；模型板顶入；放冒口/过滤器；填砂；压实；刮砂；抽出模型板；翻箱；下芯和钻浇口；合箱；浇注；凝固\n落砂；冷却输送；切除/回收浇冒口。\n出处：Zusammenfassung_Hoffmann.pdf, S.12, Kap. 2.4.1 Sandguss: Maschinenformen."]
+["A19 / Lost-Foam: Prozessablauf","Frage (DE)：Nennen Sie den Prozessablauf des Lost-Foam-Gießverfahrens.\nAntwort (DE)：1. Vorexpandieren.\n2. Modellherstellung aus EPS.\n3. Anordnung zu Gießtrauben.\n4. Schlichten mit keramischer Schlichte.\n5. Trocknung.\n6. Einbettung in bindemittelfreien Sand.\n7. Vibration/Verdichtung.\n8. Gießen: EPS vergast, Schmelze verdrängt das Modell.\n9. Ausschütteln und Abschrecken.\n10. Reinigen.\n11. Putzen.\n12. Bearbeitung.\n中文题目：列出 Lost-Foam/消失模铸造流程。\n中文答案：预发泡；制作EPS泡沫模型；组装模型树；涂陶瓷涂料；干燥；埋入无粘结剂砂；振动压实；浇注时泡沫气化、金属液取代\n；落砂/淬冷；清理；打磨清砂；后加工。\n出处：Zusammenfassung_Hoffmann.pdf, S.13, Kap. 2.4.3 Lost Foam."]
+["A20 / Kokillenguss (Schwerkraft): Prozessablauf","Frage (DE)：Beschreiben Sie den Prozessablauf beim Kokillendruckguss / Kokillenguss unter Schwerkraft.\nAntwort (DE)：1. Kokille geöffnet.\n2. Kokille geschlossen.\n3. Formfüllung und Erstarrung.\n4. Gussteilentnahme.\n中文题目：说明金属型重力铸造流程。\n中文答案：开模；闭合金属型；金属液充型并凝固；取出铸件。\n出处：Zusammenfassung_Hoffmann.pdf, S.14, Kap. 2.4.5 Kokillendruckguss (Schwerkraft)."]
+["A21 / Niederdruckkokillenguss: Prozessablauf","Frage (DE)：Beschreiben Sie den Prozessablauf beim Niederdruckkokillenguss.\nAntwort (DE)：1. Kokille geöffnet, Ofen drucklos.\n2. Kokille schließt.\n3. Druckbeaufschlagung mit ca. 0,2-0,5 bar, Schmelze steigt und füllt Form.\n4. Kokille geöffnet; Gussteil erstarrt; Ofen drucklos; Auswerfer betätigt.\n5. Gussteil entnehmen.\n中文题目：说明低压金属型铸造流程。\n中文答案：金属型打开、炉子无压；金属型闭合；施加0.2-0.5 bar低压，金属液上升充型；开模、铸件已凝固，炉子回无压，顶出；\n取件。\n出处：Zusammenfassung_Hoffmann.pdf, S.14, Kap. 2.4.6 Niederdruckkokillenguss."]
+["A22 / Druckguss: Gießtakt/Prozessablauf","Frage (DE)：Nennen Sie den Gießtakt/Prozessablauf beim Druckguss.\nAntwort (DE)：1. Form schließen.\n2. Kerne einfahren.\n3. Entlüften oder Vakuum.\n4. Schießen.\n5. Halten und Nachdrücken.\n6. Kerne ausfahren.\n7. Form öffnen.\n8. Gussstück ausfahren.\n中文题目：列出压铸循环步骤。\n中文答案：合模；进芯；排气或抽真空；高速压射充型；保持和保压补缩；退芯；开模；顶出/取出铸件。\n出处：Zusammenfassung_Hoffmann.pdf, S.15, Kap. 2.4.7 Druckguss - Verfahren."]
+["A23 / Schleuderguss: Prozessablauf","Frage (DE)：Beschreiben Sie den Prozessablauf beim Schleuderguss (Zentrifugalguss).\nAntwort (DE)：1. Flüssiges Metall in schnell rotierende Kokille gießen.\n2. Zentrifugalkraft erzeugt hohen Druck (ca. 30 mal Schwerkraftguss).\n3. Metall wird an Kokillenwand gepresst.\n4. Von der Wand aus setzt gerichtete Erstarrung ein.\n中文题目：说明离心铸造流程。\n中文答案：金属液浇入高速旋转的金属型；离心力产生高压力；金属液被压向型壁；从型壁开始定向凝固。\n出处：Zusammenfassung_Hoffmann.pdf, S.16, Kap. 2.4.8 Schleuderguss."]
+["B01 / Spritzgießen: Zyklus + Werkzeugfunktionen","Frage (DE)：Spritzgießen: Beschreiben Sie den Zyklus (Phasen) und nennen Sie die Aufgaben/Funktionen des Werkzeuges.\nAntwort (DE)：Zyklus:\n1. Plastifizieren: Dosieren/Fördern der Schmelze unter Staudruck und Drehzahl.\n2. Einspritzen: Formfüllung; Anspritzpunkt beeinflusst Bindenähte/Faserorientierung.\n3. Umschalten: von Einspritzdruck auf Nachdruck, z. B. weg-/zeit-/druckabhängig.\n4. Abkühlen und Nachdrücken: Volumenschwindung kompensieren bis Siegelzeit.\n5. Entformen.\nWerkzeugfunktionen: Schmelze aufnehmen/verteilen; Formteil ausformen, abkühlen, entformen; Kräfte\naufnehmen; Bewegungen übertragen; Werkzeugteile führen.\n中文题目：描述注塑循环阶段和模具任务。\n中文答案：阶段：塑化、注射充模、切换到保压、冷却+保压补缩、脱模。模具任务：接收并分配熔体、成形冷却脱模、承受锁模/注\n射力、传递运动、导向模具部件。\n出处：Zusammenfassung_Hoffmann.pdf, S.26-27, Kap. 3.5 Spritzgießen."]
+["B02 / Bindenaht + Dieseleffekt","Frage (DE)：Erklären Sie Bindenaht und Dieseleffekt beim Spritzgießen (Entstehung, Auswirkungen, Vermeidung).\nAntwort (DE)：Bindenaht:\n- Entsteht, wenn Schmelze um ein Hindernis fließt und zwei Schmelzfronten wieder zusammentreffen.\n- Schwachstelle; bei glasfaserverstärkten Kunststoffen oft nur ca. 50-60% Festigkeit.\n- Lage über Anschnitt beeinflussen, in gering belastete Bereiche legen.\nDieseleffekt:\n- Luft kann nicht entweichen, wird komprimiert, Temperatur steigt, Kunststoff verbrennt.\n- Typisch am Ende des Einspritzvorgangs.\n- Vermeidung: Entlüftungskanäle am Füllende.\n中文题目：解释注塑中的熔接痕和柴油效应。\n中文答案：熔接痕是两股熔体绕过障碍后汇合形成的弱点，玻纤增强材料强度可大幅下降；通过浇口位置控制到低应力区域。柴油效\n应是型腔空气排不出，被压缩升温，导致塑料烧焦；应在充模末端设置排气。\n出处：Zusammenfassung_Hoffmann.pdf, S.27, Kap. 3.5 Spritzgießen - Bindenaht und Dieseleffekt; Schwerpunkte der Prüfung\nFERT.pdf, S.1."]
+["B03 / Eigenspannungen: Entstehung und Verteilung","Frage (DE)：Erklären Sie Eigenspannungen: Entstehung, typische Spannungsverteilung über den Querschnitt und Folgen.\nWie kann man sie reduzieren?\nAntwort (DE)：- Eigenspannungen sind Spannungen im Bauteil ohne äußere Kräfte/Momente.\n- Ursachen: Schwindung bei Abkühlung, Entformungsprozesse, Montageprozesse.\n- Beim Abkühlen erstarrt/kristallisiert das Bauteil von außen nach innen: außen Druckeigenspannungen,\ninnen Zugeigenspannungen.\n- Merksatz: Zuerst erstarrt = Druck; plastischer Kern = Zug.\n- Folgen: Überlagerung mit Betriebsspannungen, Verzug, Verformung bei Bearbeitung.\n- Reduktion: Tempern unterhalb TK (Kunststoffe), Spannungsarmglühen (Metalle).\n中文题目：解释残余应力的成因、外压内拉分布口诀、后果与降低方法。\n中文答案：残余应力是在无外力时内部存在的应力。冷却收缩、脱模和装配会产生残余应力。外层先凝固/结晶，所以外层压应力，芯\n部仍塑性/熔融，形成拉应力。口诀：先冻结=压，塑性芯=拉。后果是翘曲、加工变形和与工作载荷叠加。\n出处：Zusammenfassung_Hoffmann.pdf, S.20, Abschnitt Eigenspannungen; Schwerpunkte der Prüfung FERT.pdf, S.1."]
+["B04 / Eigenspannungen: Tempern als Gegenmaßnahme","Frage (DE)：Welche Maßnahmen gibt es, um Eigenspannungen in Kunststoffbauteilen zu reduzieren? Erklären Sie Tempern.\nAntwort (DE)：- Eigenspannungen können Verzug und Verformung verursachen.\n- Reduktion bei Kunststoffen: Tempern, also Wärmebehandlung unterhalb der Kristallitschmelztemperatur TK.\n- Ziel: Mobilität erhöhen, innere Spannungen abbauen/reduzieren.\n- Bei Metallen: Spannungsarmglühen.\n- Hinweis: Bei Polymeren können sich Eigenspannungen auch mit der Zeit vermindern; sie werden reduziert,\naber nicht notwendigerweise vollständig eliminiert.\n中文题目：如何降低塑料件中的残余应力？解释 Tempern。\n中文答案：塑料可通过在低于晶体熔融温度 TK 的温区进行退火/回火来降低残余应力，使分子链有一定运动能力并释放内应力。金属\n对应为去应力退火。聚合物残余应力也可能随时间减小，但通常不能保证完全消除。\n出处：Zusammenfassung_Hoffmann.pdf, S.20, Abschnitt Eigenspannungen; 2.3 Urformverfahren für Kunststoffe (Teil 2),\nEigenspannungen."]
+["B05 / Formsand: Anforderungen","Frage (DE)：Welche Anforderungen muss Formsand (Formstoff für verlorene Formen) erfüllen?\nAntwort (DE)：Anforderungen:\n1. Detailgetreue Abbildung der Modellkonturen.\n2. Widerstand gegen Transport, metallostatischen Druck und Erosion durch Schmelze.\n3. Temperaturbeständigkeit.\n4. Inert gegenüber Schmelze, ggf. Schlichte.\n5. Gasdurchlässigkeit.\n6. Gute Zerfallseigenschaften nach dem Gießen.\n7. Schadstoffarmut.\n中文题目：型砂需要满足哪些要求？\n中文答案：能精确复制模型轮廓；有足够强度抗运输、金属静压力和冲刷；耐高温；对金属液惰性（可用涂料）；透气；浇后易崩解\n；污染/有害物少。\n出处：Zusammenfassung_Hoffmann.pdf, S.11, Kap. 2.3 Anforderungen an Formstoffe; 2.1 Gießen (Verfahren).txt, Folie 21."]
+["B06 / Form- & Kernherstellung / Anforderungen an Formstoffe","Frage (DE)：Beschreiben Sie Form- und Kernherstellung und nennen Sie Anforderungen an Formstoffe: Sand, Kerne und\nDauerformen.\nAntwort (DE)：Form- und Kernherstellung:\n- Physikalische Bindung (tongebundene Formstoffe) und chemische Bindung.\n- Verlorene Formen: Nassgussformverfahren, Kaltharzverfahren/Furanharz, Feingießen; zusätzlich\nVerdichtungsformverfahren und Vakuumformverfahren.\n- Verlorene Kerne: Cold-Box, Hot-Box, meist Kernschießmaschine.\nAnforderungen:\n- Sand: detailgetreu, widerstandsfähig, temperaturbeständig, inert, gasdurchlässig, guter Zerfall,\nschadstoffarm.\n- Kerne: maßgenau, temperaturbeständig, erosionsbeständig, formbeständig, entfernbar/Kernzerfall; für\nInnenkonturen und Hinterschneidungen.\n- Dauerformen: warmfeste Stähle, lange Haltbarkeit, hohe Maßgenauigkeit, hohe Oberflächengüte.\n中文题目：说明造型与制芯方法，并写出型砂、砂芯、永久模的要求。\n中文答案：造型/制芯有物理和化学粘结。一次性砂型包括湿砂、冷硬树脂、精密铸造等；砂芯可用Cold-Box/Hot-Box和射芯机。型砂\n要求透气、耐温、抗冲刷、易崩解；砂芯要求更高精度、耐温、可清除；永久模用热作钢，要求寿命、精度和表面质量。\n出处：Zusammenfassung_Hoffmann.pdf, S.10-11, Kap. 2.2-2.3; 2.1 Gießen (Verfahren).txt, Folien 23-41."]
+["B07 / Coldbox vs. Hotbox","Frage (DE)：Vergleichen Sie Cold-Box und Hot-Box Verfahren zur Kernherstellung (Aushärtungsprinzip, Temperatur des\nKernkastens, Ablauf).\nAntwort (DE)：- Beide dienen zur Herstellung verlorener Kerne.\n- Cold-Box: Kernkasten kalt; chemische Reaktion wird durch gasförmigen Katalysator (z. B. Amin) ausgelöst.\nAblauf: Kernkasten schließen, Sand schießen/entlüften, begasen, öffnen. Aushärtezeit wenige Sekunden.\n- Hot-Box: Kernkasten heiß; Formstoff mit organischem/flüssigem Resolharzbinder wird in heißen Kernkasten\ngeschossen und temperaturgesteuert verfestigt.\n中文题目：比较 Cold-Box 与 Hot-Box 制芯。\n中文答案：Cold-Box 用冷芯盒，通过气态催化剂（如胺气）引发固化，速度快；流程为射砂、排气、熏气、开盒取芯。Hot-Box 用加\n热芯盒，含树脂粘结剂的砂射入热芯盒后靠温度固化。\n出处：Zusammenfassung_Hoffmann.pdf/.txt, Kap. 2.2 Form- und Kernherstellung; 2.1 Gießen (Verfahren).txt, Folien 29-41."]
+["B08 / Druckguss: Kaltkammer vs. Warmkammer","Frage (DE)：Druckguss: Vergleichen Sie Kaltkammer- und Warmkammer-Druckguss (Schmelzbereitstellung, Aufbau, geeignete\nLegierungen, Begründung).\nAntwort (DE)：- Grundprinzip: Schmelze wird mittels Kolben aus der Gießkammer unter hohem Druck in die Form gepresst;\nNachspeisung durch Druck.\n- Kaltkammer: Schmelze wird je Schuss aus Dosierofen in Gießkammer gefüllt. Geeignet für Al-, Mg-,\nCu-Legierungen. Separate Gießkammer mit Kolben.\n- Warmkammer: Schmelze befindet sich im angeflanschten Warmhalteofen/Tiegel; geeignet für Mg-, Sn-,\nZn-Legierungen, wenn sie Stahlwarmhaltetiegel nicht stark angreifen.\n- Unterschiedsgrund: Gießtemperatur und chemischer Angriff der Schmelze auf Maschine/Tiegel.\n中文题目：比较冷室压铸和热室压铸。\n中文答案：压铸通过柱塞高压把熔体压入模具。冷室：每次从炉中把金属液倒入压射室，适合铝、镁、铜合金。热室：熔体在与机器\n相连的保温炉中，适合镁、锡、锌等对系统侵蚀较小的合金。两者区别主要来自浇注温度和化学侵蚀。\n出处：Zusammenfassung_Hoffmann.pdf, S.15, Kap. 2.4.7 Druckguss; 2.1 Gießen (Verfahren).txt, Folien 147-165."]
+["B09 / Lost-Foam: Vorteile","Frage (DE)：Lost-Foam / Vollformguss: Nennen und erläutern Sie Vorteile gegenüber Sand- und Kokillenguss.\nAntwort (DE)：Kurzprinzip: EPS-Modell wird nicht entnommen, sondern beim Gießen vergast; keramische Schlichte,\nbinderfreier Formsand, Verdichtung durch Vibration.\nVorteile:\n1. geringere Gesamtkosten pro Gussstück.\n2. Reduzierung des Gussgewichts.\n3. höhere Produktivität.\n4. weniger/keine Nachbearbeitung.\n5. Integration komplexer Ausführungen, z. B. vorgegossene Löcher.\n6. geringere Wandstärken möglich.\n7. reduzierte Entformschrägen.\n8. Sandwiederverwendung 95-99%, umweltfreundlich.\n中文题目：列举 Lost-Foam 的优点。\n中文答案：Lost-Foam 的EPS泡沫模型不取出，浇注时气化，金属液取代模型。优点：成本低、重量可降低、生产率高、后处理少、可\n集成复杂结构、壁厚更小、拔模斜度更小、砂可高比例回收。\n出处：Zusammenfassung_Hoffmann.pdf, Kap. 2.4.3 Lost Foam Gießverfahren; Zusammenfassung_Hoffmann.txt, Abschnitt 2.4.3."]
+["B10 / Gattierung","Frage (DE)：Was versteht man unter Gattierung beim Schmelzen/Gießen?\nAntwort (DE)：Gattierung bedeutet Festlegen bzw. Berechnen der Einsatzstoffe und ihrer Massenanteile (z. B.\nSchrott/Rücklauf, Roheisen, Legierungs- und Korrekturzusätze), um die geforderte chemische Zusammensetzung\nund Qualität der Schmelze zu erreichen.\n中文题目：熔炼/铸造中的 Gattierung 是什么？\n中文答案：Gattierung 是装炉配料：确定炉料种类及比例，例如废料/回炉料、生铁、合金和校正添加物，使熔体达到目标化学成分\n和质量。\n出处：2.1 Gießen (Grundlagen).txt, Folie 20, Abschnitt Schmelzen/Gattierung."]
+["B11 / Hinterschneidung/Unterschneidung + Schieber","Frage (DE)：Was versteht man unter einer Hinterschneidung/Unterschneidung und wie löst man das Entformen im\nSpritzgießen?\nAntwort (DE)：- Hinterschneidung: Geometrie, die beim Entformen in Hauptöffnungsrichtung mechanisch hakt; Bauteil kann\nnicht einfach gerade aus der Form gezogen werden.\n- Konstruktionsregel: Hinterschneidungen sind kritisch und sollen möglichst vermieden werden.\n- Lösungen: Schieber/seitliche Werkzeugbewegung, Kernzug/beweglicher Kern, konstruktiv ändern oder Bauteil\nteilen.\n中文题目：什么是倒扣，注塑中如何脱模？\n中文答案：倒扣是在主开模方向上会卡住的结构，零件不能直接脱出。原则上应避免。无法避免时可用滑块/侧抽芯、活动型芯，或通\n过改结构/分件消除倒扣。\n出处：2.3 Urformverfahren für Kunststoffe (Teil 2).txt, Folien 161, 166; Zusammenfassung_Hoffmann.pdf, S.11."]
+["B12 / Isotrop vs. anisotrop","Frage (DE)：Was bedeutet isotrop bzw. anisotrop im Kontext Werkstoff-/Bauteileigenschaften?\nAntwort (DE)：- Isotrop: physikalische und mechanische Eigenschaften sind richtungsunabhängig oder nahezu\nrichtungsunabhängig.\n- Anisotrop: Eigenschaften sind stark richtungsabhängig, z. B. Festigkeit, Elastizitätsmodul,\nBruchverhalten.\n- Ursachen bei Kunststoffen: eingefrorene Molekülorientierungen im Prozess, hohe Schergeschwindigkeiten,\nschnelles Abkühlen, Füllstofforientierungen (z. B. Glasfasern).\n中文题目：各向同性和各向异性是什么意思？\n中文答案：各向同性是性能基本不随方向变化；各向异性是性能强烈依赖方向，表现为强度、弹性和断裂行为随方向变化。塑料中常\n由加工中被冻结的分子取向和纤维/填料取向导致。\n出处：Zusammenfassung_Hoffmann.pdf, S.20; 2.1 Gießen (Grundlagen).txt, Folie 54; 2.3 Urformverfahren für Kunststoffe\n(Teil 1), Folie 30."]
+["B13 / Orientierungen / Anisotropie","Frage (DE)：Erklären Sie Orientierungen und den Zusammenhang zur Anisotropie (Ursachen im Prozess, Folgen wie\nSchwindung/Verzug).\nAntwort (DE)：- Orientierung: Ausrichtung von Makromolekülen oder Füll-/Verstärkungsstoffen in Fließrichtung.\n- Entstehung durch Fließen/Scheren; schnelles Abkühlen friert Orientierungen ein.\n- Begünstigt durch hohe Schergeschwindigkeiten, niedrige Werkzeugtemperatur, hohe Abkühlgeschwindigkeit\nund niedrige Schmelzetemperatur.\n- Anisotropie ist Folge von Orientierungen: Eigenschaften sind richtungsabhängig.\n- Folgen: unterschiedliche Schwindung, Schrumpfkräfte, Deformationen, Verzug; über Bauteilwand\nunterschiedliche Eigenschaften.\n中文题目：解释取向与各向异性的关系、工艺原因和后果。\n中文答案：取向是分子链/纤维沿流动方向排列。流动和剪切产生取向，快速冷却会将其冻结。高剪切、高冷却速率和低熔体温度会加\n强取向。取向导致各向异性，进一步导致不同方向收缩、翘曲和壁厚方向性能差异。\n出处：Zusammenfassung_Hoffmann.pdf, S.18 und S.20; 2.3 Urformverfahren für Kunststoffe (Teil 1), Folie 40; Teil 2, Folie\n82."]
+["B14 / Materialausnutzung MA","Frage (DE)：Wie wird die Materialausnutzung MA (Gussteilausbringung) beim Gießen berechnet? Rechnen Sie ein Beispiel\nohne Taschenrechner.\nAntwort (DE)：Formel:\nMA = M_G / (M_G + M_GS + M_S) * 100%\nM_G = Gussteilmasse, M_GS = Masse Gießsystem, M_S = Masse Speisersystem.\nRechenweg: Einheiten vereinheitlichen, M_G für mehrere Teile aufsummieren, Speiser/Gießsystem addieren,\nBruch vereinfachen.\nBeispiel: 2 Bauteile à 20 kg, je ein Speiser 2500 g, Gießsystem 5 kg.\nM_G = 40 kg, M_S = 5 kg, M_GS = 5 kg, Gesamt = 50 kg -> MA = 40/50 = 80%.\n中文题目：材料利用率 MA 怎么计算？给出无计算器快算例子。\n中文答案：公式：MA = 铸件质量 / (铸件质量 + 浇注系统质量 + 冒口系统质量) * 100%。例：两个20 kg铸件，两个2.5 kg冒口，\n5 kg浇注系统，总质量50 kg，铸件40 kg，MA=80%。\n出处：2.1 Gießen (Grundlagen).txt, Folien 65-66, Abschnitt Materialausnutzung."]
+["B15 / Strukturmodelle und Eigenschaften","Frage (DE)：Erklären Sie Strukturmodelle von Kunststoffen (amorph, teilkristallin, TPE, Duroplast) und leiten Sie\ntypische Eigenschaften sowie Tg/TK ab.\nAntwort (DE)：- Kristallinität: Anteil kristalliner/geordneter Bereiche. Amorph = ungeordnet.\n- Tg: Glasübergangstemperatur der amorphen Phase.\n- Amorph: keine geordneten Bereiche, freies Volumen, Ketten verschlauft; geringere Dichte, oft zäher und\ntransparent; kennzeichnend Tg.\n- Teilkristallin: kristalline + amorphe Anteile, höhere Dichte, höhere Festigkeit/Steifigkeit, eher opak;\nTg und TK/TM.\n- TPE: thermoplastisches Elastomer mit Gummielastizität, Verarbeitung weit oberhalb Tg.\n- Duroplast: keine Schmelzverarbeitung wie Thermoplast.\n中文题目：解释塑料结构模型和典型性能。\n中文答案：结晶度是有序晶区比例；无定形为无序。无定形材料密度较低、常透明、主要看Tg。半结晶材料有晶区和无定形区，密度\n和强度/刚度更高，通常不透明，既有Tg也有TK/TM。TPE有橡胶弹性；热固性塑料不能像热塑性塑料那样熔融加工。\n出处：Zusammenfassung_Hoffmann.pdf, S.17, Kap. 3.1 Strukturmodelle und Eigenschaften; 2.3 Urformverfahren für Kunststoffe\n(Teil 1), Folien 5-9.\nFERTIGUNG - Hoffmann Ergänzungs-QA Cards\nC01-C05 | 补充 QA：以 Hoffmann 录音为第一参照，Schwerpunkte/QA 为第二参照。每张卡后附对应 PPT 或 Zusammenfassung 截图。"]
+["C01 / Spritzgießen: Werkzeuginnendruck- und QS-Parameter","Frage (DE)：Erklären Sie Werkzeuginnendruck- und QS-Parameter beim Spritzgießen. Warum ist der Werkzeuginnendruck prozess-\nund qualitätsrelevant?\nAntwort (DE)：- Beim Umschalten wird vom Einspritzdruck auf einen niedrigeren Nachdruck gewechselt, z. B. weg-, zeit-,\nhydraulikdruck- oder werkzeuginnendruckabhängig.\n- Wird der Volumenstrom bis zum Ende des Einspritzvorgangs aufrechterhalten, steigt der Werkzeuginnendruck stark an.\n- Zu hoher Werkzeuginnendruck führt zur Gefahr der Überspritzung bzw. Gratbildung.\n- QS/Traceability: Der Werkzeuginnendruck kann mit Sensoren zu 100% überwacht werden.\n- Zusätzlich hängt die benötigte Zuhaltekraft von mittlerem Werkzeuginnendruck und projizierter Formteilfläche ab.\n中文题目：说明注塑中的模腔/模具内压力和质量监控参数。为什么 Werkzeuginnendruck 对工艺和质量重要？\n中文答案：- 切换阶段可按行程、时间、液压压力或模具内压力从注射压力切换到较低保压。\n- 如果充模末端仍保持体积流量，模具内压力会急剧上升。\n- 压力过高会导致过充、飞边/毛边。\n- 质量监控可用传感器 100% 监控 Werkzeuginnendruck，实现 Traceability。\n- 锁模力也与平均模具内压力和投影面积有关。\n出处：Schwerpunkte S.1; 2.3 Urformverfahren für Kunststoffe (Teil 2), S.89/S.105; Zusammenfassung_Hoffmann S.27.\n截图 / Screenshot: PPT Teil 2, S.89 - Umschalten werkzeuginnendruckabhängig\n截图 / Screenshot: PPT Teil 2, S.105 - mittlerer Werkzeuginnendruck / QS"]
+["C02 / Spritzgießen: Zykluszeit und Einwirkungsgrößen","Frage (DE)：Wie wird die Zykluszeit bzw. Kühlzeit beim Spritzgießen abgeschätzt und welche Größen beeinflussen sie?\nAntwort (DE)：- Die Zykluszeit wird stark durch die Kühlzeit bestimmt; als Merksatz gilt t = 2 * s².\n- Beispiel: s = 1 mm -> t = 2 s; s = 2 mm -> t = 8 s; s = 4 mm -> t = 32 s.\n- Eine Verdopplung der Wandstärke erhöht die Kühlzeit etwa auf das Vierfache.\n- Einflussgrößen: Wandstärke, Kühlkanäle, Werkzeugmaterial, Kunststoffmaterial, Schmelztemperatur und\nWerkzeugtemperatur.\n- Wandstärke, Schmelztemperatur und Werkzeugtemperatur nach oben verlängern die Kühlzeit; wirksame Kühlkanäle\nverkürzen sie.\n中文题目：注塑周期时间/冷却时间如何估算？哪些因素影响它？\n中文答案：- 周期时间很大程度由冷却时间决定，可用口诀 t = 2 * s² 估算。\n- 例：壁厚 1 mm -> 2 s；2 mm -> 8 s；4 mm -> 32 s。\n- 壁厚翻倍，冷却时间约变为 4 倍。\n- 影响因素包括壁厚、冷却水道、模具材料、塑料材料、熔体温度、模具温度。\n- 壁厚、熔体温度、模具温度升高会延长冷却时间；有效冷却通道会缩短冷却时间。\n出处：Schwerpunkte S.1; 2.3 Urformverfahren für Kunststoffe (Teil 2), S.139 Übungsfragen; Zusammenfassung_Hoffmann S.28.\n截图 / Screenshot: Zusammenfassung_Hoffmann, S.28 - Zykluszeit und Einwirkungsgrößen\n截图 / Screenshot: PPT Teil 2, S.139 - Übungsfrage zur Zykluszeit"]
+["C03 / Rheologie: Hooke, Newton und Memory-Effekt","Frage (DE)：Erklären Sie die Analogie zwischen Hookeschem und Newtonschem Gesetz. Was bedeutet viskoelastisches Stoffverhalten\nbzw. Memory-Effekt bei Kunststoffschmelzen?\nAntwort (DE)：- Hookesches Gesetz: Elastische Festkörper zeigen Spannung proportional zur Dehnung; Materialkonstante ist der\nE-Modul.\n- Newtonsches Gesetz: Newtonsche Flüssigkeiten/Gase zeigen Scherspannung proportional zur Schergeschwindigkeit;\ndie Viskosität η ist konstant.\n- Analogie: Eine Belastungsgröße wird über eine Materialkonstante mit einer Verformungs- bzw. Fließantwort verknüpft.\n- Kunststoffschmelzen sind nicht ideal newtonsch, sondern häufig viskoelastisch und strukturviskos.\n- Memory-Effekt: Molekülketten werden beim Fließen aus dem Knäuelzustand orientiert und streben später wieder in den\nKnäuelzustand zurück.\n中文题目：说明 Hooke 定律和 Newton 定律的类比；塑料熔体的黏弹性/记忆效应是什么意思？\n中文答案：- Hooke：弹性固体中应力与应变成正比，材料常数是 E 模量。\n- Newton：牛顿流体中剪应力与剪切速率成正比，黏度 η 为常数。\n- 类比点：都用材料常数把“作用量”和“响应量”联系起来。\n- 塑料熔体通常不是理想牛顿流体，而是黏弹性并常呈结构黏性。\n- Memory-Effekt：分子链在流动中被拉出/取向，之后有回到线团状态的倾向。\n出处：Schwerpunkte S.1; 2.3 Urformverfahren für Kunststoffe (Teil 1), S.27; Fertigung_Hoffmann_2026-05-13 2168s; Zusammenfassung_Hoffmann\nS.21.\n截图 / Screenshot: Zusammenfassung_Hoffmann, S.21 - Hooke/Newton\n截图 / Screenshot: PPT Teil 1, S.27 - viskoelastisch / Rückerinnerung"]
+["C04 / Rheologie: strukturviskos, hochviskos und niedrigviskos","Frage (DE)：Erläutern Sie strukturviskoses Fließverhalten einschließlich hochviskoser und niedrigviskoser Kurven. Welche\nProzessfolgen ergeben sich?\nAntwort (DE)：- Strukturviskos bedeutet: Mit steigender Schergeschwindigkeit sinkt die Viskosität η (shear-thinning).\n- Eine hochviskose Kurve liegt im η-γ-Diagramm oberhalb einer niedrigviskosen Kurve; bei gleicher Schergeschwindigkeit\nist η höher.\n- Kunststoffschmelzen sind in der Regel strukturviskos; höhere Durchsätze benötigen daher unterproportional mehr\nDruck.\n- Einflussgrößen: Molmasse/Kettenlänge, Druck, Füllstoffe, Weichmacher, Temperatur und\nSchergeschwindigkeitsbereich.\n- Molmasse/Kettenlänge nach oben erhöht η; Temperatur oder geeignete Prozesswahl können η senken und den\nDurchsatz erleichtern.\n中文题目：说明结构黏性流动，包括高黏/低黏曲线，以及它对工艺的影响。\n中文答案：- 结构黏性指剪切速率升高时黏度下降，也叫 shear-thinning。\n- 高黏曲线在 η-γ 图中位于低黏曲线之上；同一剪切速率下黏度更高。\n- 塑料熔体通常呈结构黏性，所以提高产量时压力需求不是线性等比例增加。\n- 影响因素包括分子量/链长、压力、填料、增塑剂、温度和剪切速率范围。\n- 链长/分子量升高使黏度升高；温度升高或选择合适工艺可降低流动阻力。\n出处：Schwerpunkte S.1; 2.3 Urformverfahren für Kunststoffe (Teil 1), S.21/S.24/S.26; Zusammenfassung_Hoffmann S.22.\n截图 / Screenshot: PPT Teil 1, S.21 - strukturviskos / shear-thinning\n截图 / Screenshot: PPT Teil 1, S.24 - Einflussgrößen auf das Fließverhalten"]
+["C05 / Kunststoffe: Nukleierung und Kristallisation","Frage (DE)：Erklären Sie Nukleierung und Kristallisation bei teilkristallinen Thermoplasten. Warum kristallisieren Kunststoffe nie zu\n100%?\nAntwort (DE)：- Kristallisation benötigt Unterkühlung der Schmelze; erst dann können Keime wachsen.\n- Nukleierung bedeutet gezielte Beeinflussung des Kristallgefüges durch geeignete Kristallisationskeime/Fremdkeime.\n- Mehr Keime führen zu feinerem Gefüge und Kristallisation bei höheren Temperaturen; das kann die Zykluszeit\nverkürzen.\n- Polymere kristallisieren nie zu 100% wegen Kettenenden, Verschlaufungen, Rückfaltungen und interlamellaren Ketten.\n- Drei Stufen: Keimbildung, primäre Kristallisation im Werkzeug, sekundäre Kristallisation in der Lagerung.\n中文题目：说明半结晶热塑性塑料中的成核和结晶；为什么塑料不能 100% 结晶？\n中文答案：- 结晶需要熔体过冷；过冷后晶核才能生长。\n- Nukleierung 是通过加入合适晶核/异质晶核来控制结晶组织。\n- 晶核越多，组织越细，并可在较高温度结晶，从而缩短周期时间。\n- 聚合物因链端、缠结、链折返和层间链，不能达到 100% 结晶。\n- 结晶过程可分为成核、模具内一次结晶、储存过程中的二次结晶。\n出处：Schwerpunkte S.1; 2.3 Urformverfahren für Kunststoffe (Teil 1), S.35/S.40; 2.3 Teil 2, S.139 Übungsfragen; Zusammenfassung_Hoffmann\nS.17-S.19.\n截图 / Screenshot: PPT Teil 1, S.35 - Nukleierung / nie 100% / primär-sekundär\n截图 / Screenshot: PPT Teil 1, S.40 - Unterkühlung, Morphologie, Schwindung/Verzug"]
+</script>
+
   <script>
-    const STORAGE_KEY = "garber1-progress-v2";
-    const REMOVED_LEGACY_NUMBERS = [18, 19, 21, 124, 182, 196, 211, 213, 221];
+    const STORAGE_KEY = "fv-progress-v1";
+    const OLD_GARBER_STORAGE_KEY = "garber1-progress-v2";
     const QUIZ_SIZE = 20;
     const STUDY_MODES = {
       sequence: "顺序刷题",
@@ -1030,10 +1162,27 @@
       wrong: "错题库"
     };
     const VALID_CHOICES = new Set(["unknown", "unsure", "known"]);
-    const raw = document.getElementById("sourceData").textContent.trim();
-
+    const DATASETS = {
+      garber: {
+        id: "garber",
+        label: "Garber",
+        description: "我们之前整理的 Garber1 题库",
+        raw: document.getElementById("sourceData").textContent.trim(),
+        removedLegacyNumbers: [18, 19, 21, 124, 182, 196, 211, 213, 221]
+      },
+      hoffmann: {
+        id: "hoffmann",
+        label: "Hoffmann",
+        description: "来自新 PDF 的 Hoffmann 原样题库",
+        raw: document.getElementById("hoffmannData").textContent.trim(),
+        removedLegacyNumbers: []
+      }
+    };
+    
     const state = {
-      cards: parseDeck(raw),
+      decks: {},
+      deckId: null,
+      cards: [],
       order: [],
       index: 0,
       flipped: false,
@@ -1043,8 +1192,12 @@
       progress: loadProgress(),
       query: ""
     };
-
+    
     const el = {
+      app: document.querySelector(".app"),
+      deckChooser: document.getElementById("deckChooser"),
+      deckSwitchBtn: document.getElementById("deckSwitchBtn"),
+      deckName: document.getElementById("deckName"),
       deckCount: document.getElementById("deckCount"),
       counter: document.getElementById("counter"),
       progressBar: document.getElementById("progressBar"),
@@ -1069,12 +1222,62 @@
       statAgain: document.getElementById("statAgain"),
       statLeft: document.getElementById("statLeft")
     };
-
-    state.order = buildOrder(state.mode);
+    
+    initializeDecks();
     bindEvents();
-    render();
-
-    function parseDeck(text) {
+    renderDeckChooser();
+    
+    function initializeDecks() {
+      Object.values(DATASETS).forEach(dataset => {
+        state.decks[dataset.id] = {
+          ...dataset,
+          cards: parseDeck(dataset.raw, dataset.id, dataset.label, dataset.removedLegacyNumbers)
+        };
+      });
+    }
+    
+    function currentDeck() {
+      return state.deckId ? state.decks[state.deckId] : null;
+    }
+    
+    function renderDeckChooser() {
+      el.app.classList.remove("deck-selected");
+      el.deckSwitchBtn.hidden = true;
+      el.deckName.textContent = "选择卡组";
+      el.deckCount.textContent = Object.values(state.decks).reduce((sum, deck) => sum + deck.cards.length, 0);
+      Object.values(state.decks).forEach(deck => {
+        const count = document.querySelector(`[data-deck-count="${deck.id}"]`);
+        if (count) count.textContent = `${deck.cards.length} 张`;
+      });
+    }
+    
+    function selectDeck(deckId) {
+      const deck = state.decks[deckId];
+      if (!deck) return;
+      state.deckId = deckId;
+      state.cards = deck.cards;
+      state.order = buildOrder(state.mode);
+      state.index = 0;
+      state.flipped = false;
+      state.pendingChoice = null;
+      state.query = "";
+      el.searchInput.value = "";
+      el.app.classList.add("deck-selected");
+      el.deckSwitchBtn.hidden = false;
+      render();
+    }
+    
+    function showDeckChooser() {
+      state.deckId = null;
+      state.cards = [];
+      state.order = [];
+      state.index = 0;
+      state.flipped = false;
+      state.pendingChoice = null;
+      renderDeckChooser();
+    }
+    
+    function parseDeck(text, deckId, deckLabel, removedLegacyNumbers = []) {
       return text
         .split(/\r?\n/)
         .map(line => line.trim())
@@ -1085,13 +1288,17 @@
           const extras = Object.entries(sections)
             .filter(([key]) => !["Frage (DE)", "Antwort (DE)", "中文题目", "中文答案", "出处", "????", "??"].includes(key))
             .map(([key, value]) => ({ label: key, value }));
-
-          const legacyNumber = legacyCardNumber(index);
-
+    
+          const legacyNumber = legacyCardNumber(index, removedLegacyNumbers);
+          const hoffmannCode = deckId === "hoffmann" ? ((pair[0] || "").match(/^([ABC]\d{2})/) || [])[1] : "";
+    
           return {
-            id: `card-${legacyNumber}`,
+            id: `${deckId}-card-${legacyNumber}`,
             number: legacyNumber,
             deckIndex: index + 1,
+            deckId,
+            deckLabel,
+            displayNumber: hoffmannCode || String(index + 1),
             front: pretty(pair[0] || ""),
             questionDe: pretty(sections["Frage (DE)"] || pair[0] || ""),
             answerDe: pretty(sections["Antwort (DE)"] || ""),
@@ -1099,11 +1306,11 @@
             answerZh: pretty(sections["中文答案"] || sections["????"] || ""),
             source: pretty(sections["出处"] || sections["??"] || ""),
             extras: extras.map(extra => ({ label: extra.label, value: pretty(extra.value) })),
-            family: inferFamily(pair[0] || pair[1] || "")
+            family: deckId === "hoffmann" ? inferHoffmannFamily(pair[0] || "") : inferFamily(pair[0] || pair[1] || "")
           };
         });
     }
-
+    
     function parsePair(line, index) {
       try {
         return JSON.parse(line);
@@ -1112,11 +1319,11 @@
         if (loose) {
           return [decodeLooseString(loose[1]), decodeLooseString(loose[2])];
         }
-        console.error("??????", index + 1, jsonError, line);
+        console.error("卡片解析失败", index + 1, jsonError, line);
         return [`Karte ${index + 1}`, line];
       }
     }
-
+    
     function decodeLooseString(value) {
       return String(value)
         .replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
@@ -1124,15 +1331,15 @@
         .replace(/\\r/g, "\r")
         .replace(/\\"/g, "\"");
     }
-
-    function legacyCardNumber(index) {
+    
+    function legacyCardNumber(index, removedLegacyNumbers = []) {
       let number = index + 1;
-      REMOVED_LEGACY_NUMBERS.forEach(removed => {
+      removedLegacyNumbers.forEach(removed => {
         if (number >= removed) number += 1;
       });
       return number;
     }
-
+    
     function splitSections(text) {
       const sections = {};
       let current = "";
@@ -1149,7 +1356,7 @@
       });
       return sections;
     }
-
+    
     function isSectionLabel(label) {
       return [
         "Frage (DE)",
@@ -1163,8 +1370,16 @@
         "Zahlen (DE, aus Folie)"
       ].includes(label);
     }
-
+    
+    function inferHoffmannFamily(title) {
+      const code = String(title || "").match(/^([ABC])\d{2}/);
+      return code ? `Hoffmann ${code[1]}` : "Hoffmann";
+    }
+    
     function inferFamily(text) {
+      if (/Läppen|geläppt|Läpp/i.test(text)) {
+        return "FT10";
+      }
       if (/Honen|Honahle|Honleisten|Honsteine|Kreuzschliff|Ziehschleifen/i.test(text)) {
         return "FT9";
       }
@@ -1197,7 +1412,7 @@
       }
       return "FT1";
     }
-
+    
     function pretty(text) {
       return String(text)
         .replace(/\\\((.*?)\\\)/g, "$1")
@@ -1205,8 +1420,12 @@
         .replace(/[ \t]*\n[ \t]*/g, "\n")
         .trim();
     }
-
+    
     function bindEvents() {
+      el.deckSwitchBtn.addEventListener("click", showDeckChooser);
+      document.querySelectorAll("[data-deck-choice]").forEach(button => {
+        button.addEventListener("click", () => selectDeck(button.dataset.deckChoice));
+      });
       el.prevBtn.addEventListener("click", () => move(-1));
       el.nextBtn.addEventListener("click", () => move(1));
       el.answerNextBtn.addEventListener("click", advanceAfterAnswer);
@@ -1230,6 +1449,7 @@
         button.addEventListener("click", () => answerCard(button.dataset.choice));
       });
       window.addEventListener("keydown", event => {
+        if (!state.deckId) return;
         if (event.target.matches("input, textarea, select, [contenteditable='true']")) return;
         if (event.target.closest("button") && (event.key === " " || event.key === "Enter")) return;
         if (event.key === "ArrowRight") {
@@ -1253,30 +1473,30 @@
         }
       });
     }
-
+    
     function goForwardByKeyboard() {
       if (!currentCard()) return;
       if (state.flipped) {
         advanceAfterAnswer();
       }
     }
-
+    
     function answerByKeyboard(choice) {
       if (!currentCard() || state.flipped) return;
       answerCard(choice);
     }
-
+    
     function buildOrder(mode) {
       const allCards = state.cards.map((card, index) => ({ card, index }));
       const base = allCards
         .filter(({ card }) => mode !== "wrong" || isWrongActive(card))
         .map(({ index }) => index);
-
+    
       if (mode === "shuffle") return shuffledCopy(base);
       if (mode === "quiz") return shuffledCopy(base).slice(0, Math.min(QUIZ_SIZE, base.length));
       return base;
     }
-
+    
     function shuffledCopy(items) {
       const copy = [...items];
       for (let i = copy.length - 1; i > 0; i--) {
@@ -1285,13 +1505,13 @@
       }
       return copy;
     }
-
+    
     function modeTag(card) {
       if (state.mode === "wrong") return "错题库";
       const label = STUDY_MODES[state.mode] || "刷题";
-      return `${label} · ${card.family}`;
+      return `${label} · ${card.deckLabel} · ${card.family}`;
     }
-
+    
     function restartTitle() {
       return ({
         sequence: "重开顺序刷题",
@@ -1300,40 +1520,47 @@
         wrong: "刷新错题库"
       })[state.mode] || "重开当前模式";
     }
-
+    
     function isWrongActive(card) {
       const record = state.progress[card.id] || {};
       return (record.wrongCount || 0) > 0 && record.rating !== "known";
     }
-
+    
     function currentCard() {
       if (!state.order.length) return null;
       return state.cards[state.order[state.index]];
     }
-
+    
     function originalCardLabel(card) {
+      if (card.deckId === "hoffmann") return card.displayNumber || `Hoffmann ${card.deckIndex}`;
       return `原题 ${card.deckIndex || card.number || ""}`.trim();
     }
-
+    
     function isRepeatOccurrence(queueIndex, absoluteIndex) {
       if (typeof queueIndex !== "number" || typeof absoluteIndex !== "number") return false;
       return state.order.findIndex(item => item === absoluteIndex) !== queueIndex;
     }
-
+    
     function repeatLabel(queueIndex, absoluteIndex) {
       return isRepeatOccurrence(queueIndex, absoluteIndex) ? " · 复现" : "";
     }
-
+    
     function render() {
+      if (!state.deckId) {
+        renderDeckChooser();
+        return;
+      }
       const card = currentCard();
       if (!card) {
         renderEmptyState();
         return;
       }
+      const deck = currentDeck();
       const currentAbsoluteIndex = state.order[state.index];
       const originalLabel = originalCardLabel(card);
       const repeatSuffix = repeatLabel(state.index, currentAbsoluteIndex);
       const record = state.progress[card.id] || {};
+      el.deckName.textContent = deck.label;
       el.deckCount.textContent = state.cards.length;
       el.counter.textContent = `${originalLabel}${repeatSuffix}`;
       el.progressBar.style.width = `${((state.index + 1) / state.order.length) * 100}%`;
@@ -1346,23 +1573,27 @@
       el.nextBtn.disabled = state.order.length <= 1;
       el.shuffleBtn.title = restartTitle();
       el.shuffleBtn.setAttribute("aria-label", el.shuffleBtn.title);
+      el.resetBtn.title = "重置当前卡组进度";
+      el.resetBtn.setAttribute("aria-label", el.resetBtn.title);
       document.querySelectorAll("[data-choice]").forEach(button => {
         button.disabled = false;
       });
-
+    
       el.questionDe.innerHTML = renderRichText(card.questionDe || card.front);
       el.questionZh.innerHTML = renderRichText(card.questionZh);
       el.questionDe.classList.toggle("hidden", state.lang === "zh");
       el.questionZh.classList.toggle("hidden", state.lang === "de" || !card.questionZh);
-
+    
       renderAnswer(card);
       el.cardInner.classList.toggle("flipped", state.flipped);
       renderModeButtons();
       renderList();
       renderStats();
     }
-
+    
     function renderEmptyState() {
+      const deck = currentDeck();
+      el.deckName.textContent = deck ? deck.label : "选择卡组";
       el.deckCount.textContent = state.cards.length;
       el.counter.textContent = "0 / 0";
       el.progressBar.style.width = "0%";
@@ -1372,7 +1603,7 @@
       el.frontStatus.textContent = "无卡片";
       el.backStatus.textContent = "无卡片";
       el.questionDe.innerHTML = renderRichText(state.mode === "wrong" ? "错题库为空" : "没有卡片");
-      el.questionZh.innerHTML = renderRichText(state.mode === "wrong" ? "在刷题时点击“不知道”后，这里会出现错题。" : "");
+      el.questionZh.innerHTML = renderRichText(state.mode === "wrong" ? "在当前卡组刷题时点击“不知道”后，这里会出现错题。" : "");
       el.questionDe.classList.remove("hidden");
       el.questionZh.classList.toggle("hidden", !el.questionZh.textContent);
       el.answerGrid.innerHTML = "";
@@ -1387,7 +1618,7 @@
       renderList();
       renderStats();
     }
-
+    
     function renderAnswer(card) {
       el.answerGrid.innerHTML = "";
       if (state.lang !== "zh" && card.answerDe) {
@@ -1406,7 +1637,7 @@
         el.answerGrid.appendChild(source);
       }
     }
-
+    
     function section(label, value, className) {
       const wrap = document.createElement("div");
       wrap.className = `section ${className || ""}`;
@@ -1418,16 +1649,17 @@
       wrap.append(title, body);
       return wrap;
     }
-
+    
     function renderRichText(value) {
       const normalized = normalizeFormulaText(value);
       return formatFormulaHtml(escapeHtml(normalized)).replace(/\n/g, "<br>");
     }
-
+    
     function normalizeFormulaText(value) {
       return String(value || "")
         .replace(/\*\*([^*]+)\*\*/g, "$1")
         .replace(/\*([^*]+)\*/g, "$1")
+        .replace(/\\\[(.*?)\\\]/gs, "$1")
         .replace(/\\\((.*?)\\\)/g, "$1")
         .replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, "($1)/($2)")
         .replace(/\\sqrt\{([^{}]+)\}/g, "√($1)")
@@ -1438,6 +1670,7 @@
         .replace(/\\beta/g, "β")
         .replace(/\\sigma/g, "σ")
         .replace(/\\epsilon/g, "ε")
+        .replace(/\\eta/g, "η")
         .replace(/\\varphi/g, "φ")
         .replace(/\\phi/g, "φ")
         .replace(/ϕ/g, "φ")
@@ -1459,7 +1692,7 @@
         .replace(/[ \t]*\n[ \t]*/g, "\n")
         .trim();
     }
-
+    
     function escapeHtml(value) {
       return String(value)
         .replace(/&/g, "&amp;")
@@ -1468,14 +1701,14 @@
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#39;");
     }
-
+    
     function formatFormulaHtml(html) {
       let output = html;
-
+    
       output = output.replace(/\^\(([^()<>]{1,60})\)/g, (_, exponent) => `<sup>${formatFormulaHtml(exponent)}</sup>`);
       output = output.replace(/\^\{([^{}<>]{1,60})\}/g, (_, exponent) => `<sup>${formatFormulaHtml(exponent)}</sup>`);
       output = output.replace(/\^([0-9+\-−.,A-Za-zα-ωΑ-Ω]{1,12})/g, (_, exponent) => `<sup>${formatFormulaHtml(exponent)}</sup>`);
-
+    
       output = output.replace(/\bkc1[,.]1\b/gi, () => mathVar("k", "c1,1"));
       output = output.replace(/\b([A-Za-zα-ωΑ-Ω])_([A-Za-z0-9α-ωΑ-Ω,.\-−]{1,12})\b/g, (_, base, sub) => mathVar(base, sub));
       output = output.replace(/φ_?(gesamt|max|[hlbA]|0-2|0-1|1-2)/g, (_, sub) => mathVar("φ", sub));
@@ -1510,28 +1743,27 @@
       output = output.replace(/\bL_?(ges|Abschnitt)\b/g, (_, sub) => mathVar("L", sub));
       output = output.replace(/\bl_?([au])\b/g, (_, sub) => mathVar("l", sub));
       output = output.replace(/√\(([^()<>]{1,80})\)/g, (_, radicand) => `<span class="math-sqrt">√(${radicand})</span>`);
-
+    
       return output;
     }
-
+    
     function mathVar(base, subscript) {
       return `<span class="math-var">${base}<sub>${subscript}</sub></span>`;
     }
-
+    
     function renderList() {
-      const activeCard = currentCard();
       const baseOrder = state.order;
       const items = baseOrder
         .map((absoluteIndex, queueIndex) => ({ card: state.cards[absoluteIndex], absoluteIndex, queueIndex }))
         .filter(({ card }) => Boolean(card))
         .filter(({ card }) => {
           if (!state.query) return true;
-          return [card.questionDe, card.questionZh, card.answerDe, card.answerZh, card.source]
+          return [card.front, card.questionDe, card.questionZh, card.answerDe, card.answerZh, card.source]
             .join(" ")
             .toLowerCase()
             .includes(state.query);
         });
-
+    
       el.visibleCount.textContent = `${items.length} / ${baseOrder.length}`;
       el.cardList.innerHTML = "";
       items.forEach(({ card, absoluteIndex, queueIndex }) => {
@@ -1544,11 +1776,11 @@
           state.pendingChoice = null;
           render();
         });
-
+    
         const title = document.createElement("div");
         title.className = "list-title";
-        title.innerHTML = renderRichText(card.questionDe);
-
+        title.innerHTML = renderRichText(card.deckId === "hoffmann" ? card.front : card.questionDe);
+    
         const meta = document.createElement("div");
         meta.className = "list-meta";
         const left = document.createElement("span");
@@ -1561,7 +1793,7 @@
         el.cardList.appendChild(button);
       });
     }
-
+    
     function renderStats() {
       const records = state.cards.map(card => state.progress[card.id]).filter(Boolean);
       const seen = records.length;
@@ -1572,7 +1804,7 @@
       el.statAgain.textContent = again;
       el.statLeft.textContent = Math.max(state.cards.length - good, 0);
     }
-
+    
     function move(delta) {
       if (!state.order.length) return;
       state.pendingChoice = null;
@@ -1580,7 +1812,7 @@
       state.flipped = false;
       render();
     }
-
+    
     function restartCurrentMode() {
       state.order = buildOrder(state.mode);
       state.index = 0;
@@ -1588,7 +1820,7 @@
       state.pendingChoice = null;
       render();
     }
-
+    
     function answerCard(choice) {
       if (!VALID_CHOICES.has(choice)) return;
       const card = currentCard();
@@ -1609,16 +1841,16 @@
       state.flipped = true;
       render();
     }
-
+    
     function advanceAfterAnswer() {
       const choice = state.pendingChoice;
       const currentAbsoluteIndex = state.order[state.index];
       state.pendingChoice = null;
-
+    
       if (choice === "unsure") {
         scheduleRepeatLater(currentAbsoluteIndex);
       }
-
+    
       if (state.mode === "wrong" && choice === "known") {
         removeCurrentAndFutureRepeats(currentAbsoluteIndex);
         if (state.index >= state.order.length) state.index = 0;
@@ -1626,25 +1858,25 @@
         render();
         return;
       }
-
+    
       if (choice === "known") {
         removeFutureRepeats(currentAbsoluteIndex);
       }
-
+    
       const finishedRound = state.index >= state.order.length - 1;
       if (state.mode !== "wrong" && finishedRound) {
         continueAfterRound();
         return;
       }
-
+    
       move(1);
     }
-
+    
     function continueAfterRound() {
       const wrongOrder = buildOrder("wrong");
       state.flipped = false;
       state.pendingChoice = null;
-
+    
       if (wrongOrder.length) {
         state.mode = "wrong";
         state.order = wrongOrder;
@@ -1652,12 +1884,12 @@
         render();
         return;
       }
-
+    
       state.order = buildOrder(state.mode);
       state.index = 0;
       render();
     }
-
+    
     function scheduleRepeatLater(absoluteIndex) {
       if (typeof absoluteIndex !== "number") return;
       removeFutureRepeats(absoluteIndex);
@@ -1665,7 +1897,7 @@
       const insertAt = minInsert + Math.floor(Math.random() * (state.order.length - minInsert + 1));
       state.order.splice(insertAt, 0, absoluteIndex);
     }
-
+    
     function removeFutureRepeats(absoluteIndex) {
       for (let i = state.order.length - 1; i > state.index; i--) {
         if (state.order[i] === absoluteIndex) {
@@ -1673,7 +1905,7 @@
         }
       }
     }
-
+    
     function removeCurrentAndFutureRepeats(absoluteIndex) {
       for (let i = state.order.length - 1; i >= state.index; i--) {
         if (state.order[i] === absoluteIndex) {
@@ -1681,7 +1913,7 @@
         }
       }
     }
-
+    
     function setMode(mode) {
       if (!Object.prototype.hasOwnProperty.call(STUDY_MODES, mode)) return;
       state.mode = mode;
@@ -1691,13 +1923,13 @@
       state.pendingChoice = null;
       render();
     }
-
+    
     function renderModeButtons() {
       document.querySelectorAll("[data-mode]").forEach(button => {
         button.classList.toggle("active", button.dataset.mode === state.mode);
       });
     }
-
+    
     function statusText(rating) {
       return ({
         unknown: "不知道",
@@ -1705,22 +1937,42 @@
         known: "知道"
       })[rating] || "未复习";
     }
-
+    
     function loadProgress() {
+      let progress = {};
       try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
       } catch {
-        return {};
+        progress = {};
       }
+    
+      try {
+        const oldGarber = JSON.parse(localStorage.getItem(OLD_GARBER_STORAGE_KEY)) || {};
+        let migrated = false;
+        Object.entries(oldGarber).forEach(([key, value]) => {
+          if (key.startsWith("card-") && !progress[`garber-${key}`]) {
+            progress[`garber-${key}`] = value;
+            migrated = true;
+          }
+        });
+        if (migrated) localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+      } catch {
+        // Keep new progress if old progress cannot be read.
+      }
+      return progress;
     }
-
+    
     function saveProgress() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress));
     }
-
+    
     function resetProgress() {
-      state.progress = {};
-      localStorage.removeItem(STORAGE_KEY);
+      if (!state.deckId) return;
+      const prefix = `${state.deckId}-`;
+      Object.keys(state.progress).forEach(key => {
+        if (key.startsWith(prefix)) delete state.progress[key];
+      });
+      saveProgress();
       state.order = buildOrder(state.mode);
       state.index = 0;
       state.flipped = false;
