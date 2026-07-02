@@ -799,6 +799,7 @@
 
 
 
+
     <section id="deckChooser" class="deck-chooser" aria-label="选择卡组">
       <div>
         <h2>选择卡组</h2>
@@ -1232,7 +1233,7 @@
 ["D03 Industrieroboter: Aufbau und Kinematik / 工业机器人组成","Frage (DE)：Aus welchen Hauptbestandteilen besteht ein Industrieroboter?\nAntwort (DE)：Ein Industrieroboter ist eine universelle, programmierbare Maschine zur Handhabung, Montage oder Bearbeitung von Werkstücken.\nHauptbestandteile sind Manipulator bzw. Roboterarm, Steuerung, Effektoren wie Werkzeug oder Greifer und Sensorik. Die Kinematik beschreibt die Achsstruktur, zum Beispiel RRR mit drei rotatorischen Hauptachsen.\nWichtig: Erst der passende Effektor macht den Roboter zur Prozessmaschine, etwa Greifer für Pick-and-Place oder Brenner/Werkzeug für Schweißen und Bearbeitung.\n中文题目：工业机器人由哪些主要部分组成？\n中文答案：工业机器人是用于搬运、装配或加工工件的通用可编程机器。\n主要组成包括机械手/机器人臂、控制系统、末端执行器（工具或夹爪）和传感器。运动学描述其轴结构，例如 RRR 表示三个主要旋转轴。\n重点：机器人本体只是运动平台，配合正确的末端执行器后，才成为具体工艺设备，如夹爪用于搬运，焊枪/工具用于焊接或加工。\n出处：neue/FT_Skript_5_Automation_unlocked.pdf S.5；vogelei6-19.m4a"]
 ["D04 Robotereinsatz beim Schutzgasschweißen / 机器人保护气焊应用","Frage (DE)：Warum wird Schutzgasschweißen häufig mit Robotern automatisiert?\nAntwort (DE)：Beim Schutzgasschweißen muss das Werkzeug entlang einer definierten Bahn mit geeigneter Orientierung, Geschwindigkeit und Abstand geführt werden. Ein Roboter kann diese Bewegung reproduzierbar und mit gleichbleibender Prozessführung ausführen.\nDafür müssen Bahn, Posen, Werkzeugbezugspunkt bzw. TCP und Prozessparameter programmiert werden. Der Effektor ist hier nicht ein Greifer, sondern das Schweißwerkzeug.\nEinordnung: Das Beispiel zeigt, dass Roboter nicht nur für Handhabung, sondern auch für Bearbeitung und Fügeprozesse eingesetzt werden können.\n中文题目：为什么保护气焊常用机器人自动化？\n中文答案：保护气焊要求焊枪沿规定轨迹，以合适姿态、速度和距离运动。机器人可以重复、稳定地执行这类运动，从而保持过程一致性。\n需要编程轨迹、位姿、工具中心点 TCP 和工艺参数；此时末端执行器不是夹爪，而是焊接工具。\n归类：这个例子说明机器人不仅能搬运，也能用于加工和连接工艺。\n出处：neue/FT_Skript_5_Automation_unlocked.pdf S.5, S.7；vogelei6-19.m4a"]
 </script>
-                            <script>
+                              <script>
     const STORAGE_KEY = "fv-progress-v1";
     const OLD_GARBER_STORAGE_KEY = "garber1-progress-v2";
     const QUIZ_SIZE = 20;
@@ -1585,7 +1586,11 @@
     }
     
     function answerByKeyboard(choice) {
-      if (!currentCard() || state.flipped) return;
+      if (!currentCard()) return;
+      if (state.flipped) {
+        advanceAfterAnswer();
+        return;
+      }
       answerCard(choice);
     }
     
